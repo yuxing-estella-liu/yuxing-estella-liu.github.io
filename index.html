@@ -1,0 +1,1855 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yuxing (Estella) Liu</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Yuxing (Estella) Liu: material programming, 4D printing, ML-driven inverse design and closed-loop robotic fabrication. ITECH, University of Stuttgart / ICD / IntCDC.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Roboto+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: al-folio-style single column (930px), sticky top nav, hash-switched views; profile floats right on About. */
+:root {
+  --bg: #ffffff;
+  --fg: #212529;
+  --muted: #6c757d;
+  --accent: #d6336c;
+  --rule: #e4e4e8;
+  --soft: #faf5f7;
+  --badge-acadia: #d6336c;
+  --badge-cdrf: #1f6f8b;
+  --badge-caadria: #2e7d4f;
+  --badge-iass: #8a5a00;
+  --badge-other: #5f6670;
+  --badge-fg: #ffffff;
+  --font-body: "Roboto", -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --nav-bg: rgba(255,255,255,.88);
+  --circle: #dccbd2;
+  --circle-alt: #f783ac;
+  --term-bg: #1b1a1f;
+  --term-fg: #e7e5ea;
+  --term-dim: #9c98a3;
+  --term-acc: #ff8fb8;
+  --term-rule: #34323a;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1c1c1d; --fg: #e6e6e8; --muted: #a2a3a8; --accent: #ff7aa8; --rule: #38383c; --soft: #252528;
+    --badge-acadia: #b03463; --badge-cdrf: #1d6680; --badge-caadria: #2a6c46; --badge-iass: #80570a; --badge-other: #55595f;
+    --nav-bg: rgba(28,28,29,.88); color-scheme: dark; --circle: #3a383d; --circle-alt: #ffc2d6;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1c1c1d; --fg: #e6e6e8; --muted: #a2a3a8; --accent: #ff7aa8; --rule: #38383c; --soft: #252528;
+  --badge-acadia: #b03463; --badge-cdrf: #1d6680; --badge-caadria: #2a6c46; --badge-iass: #80570a; --badge-other: #55595f;
+  --nav-bg: rgba(28,28,29,.88); color-scheme: dark; --circle: #3a383d; --circle-alt: #ffc2d6;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 300 1rem/1.65 var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--nav-bg); }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+strong, b { font-weight: 500; }
+h1, h2, h3 { text-wrap: balance; }
+img { max-width: 100%; display: block; }
+
+.wrap { max-width: 930px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* nav */
+header.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--nav-bg); backdrop-filter: blur(8px); border-bottom: 1px solid var(--rule); }
+.nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 56px; flex-wrap: wrap; }
+.brand { color: var(--fg); font-size: 1.1rem; white-space: nowrap; }
+.brand b { font-weight: 500; }
+.brand:hover { text-decoration: none; color: var(--accent); }
+.nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 2px 18px; margin: 0; padding: 0; align-items: center; }
+.nav ul a { color: var(--fg); font-size: .95rem; padding: 6px 0; display: inline-block; }
+.nav ul a[aria-current="page"] { color: var(--accent); font-weight: 400; }
+.nav ul a:hover { color: var(--accent); text-decoration: none; }
+.theme-btn { background: none; border: 1px solid var(--rule); color: var(--fg); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; display: grid; place-items: center; }
+.theme-btn svg { width: 16px; height: 16px; fill: currentColor; }
+
+main { padding-block: 40px 24px; }
+[data-view] { display: none; }
+[data-view].on { display: block; }
+
+/* page heads */
+.post-title { font-size: 2.4rem; font-weight: 300; margin: 0 0 4px; line-height: 1.2; }
+.post-title b { font-weight: 500; }
+.post-desc { color: var(--muted); margin: 0 0 28px; font-size: 1rem; }
+h2.sec { font-size: 1.15rem; font-weight: 400; color: var(--accent); margin: 44px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--rule); }
+h2.sec a { color: inherit; }
+.lead p { margin: 0 0 14px; max-width: 68ch; }
+
+/* about */
+.about-grid { display: flow-root; }
+.profile { float: right; width: 230px; margin: 4px 0 18px 28px; }
+.portrait { position: relative; aspect-ratio: 4/5; max-width: 100%; border-radius: 4px; overflow: hidden;
+  background-color: var(--soft);
+  background-image: radial-gradient(ellipse 5px 13px at center, var(--rule) 98%, transparent 100%);
+  background-size: 18px 30px; display: grid; place-items: center; }
+.portrait img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+.avatar { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.avatar .lid { transform-box: fill-box; transform-origin: 50% 0; transform: scaleY(0); animation: blink 5.2s infinite; }
+.avatar .lid + .lid { animation-delay: .02s; }
+@keyframes blink { 0%, 93%, 100% { transform: scaleY(0); } 96% { transform: scaleY(1); } }
+.avatar .mouth { transition: d .3s ease; }
+.portrait.happy .mouth { d: path("M176 262 C 190 280, 212 280, 226 262"); }
+@media (prefers-reduced-motion: reduce) { .avatar .lid { animation: none; } }
+
+/* ask prompt */
+.ask { max-width: 68ch; margin-top: 22px; border: 1px solid var(--rule); border-radius: 4px; background: var(--term-bg); color: var(--term-fg); font: .86rem/1.6 var(--font-mono); overflow: hidden; }
+.ask-bar { display: flex; align-items: center; gap: 6px; padding: 7px 12px; border-bottom: 1px solid var(--term-rule); color: var(--term-dim); font-size: .74rem; }
+.ask-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--term-rule); display: inline-block; }
+.ask-log { max-height: 260px; overflow-y: auto; padding-block: 10px 4px; padding-left: 14px; padding-right: 14px; }
+.ask-log p { margin: 0 0 8px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.ask-log .q { color: var(--term-dim); }
+.ask-log .q b { color: var(--term-acc); font-weight: 500; }
+.ask-log a { color: var(--term-acc); }
+.ask-form { display: flex; align-items: center; gap: 8px; padding-block: 6px 12px; padding-left: 14px; padding-right: 14px; }
+.ask-form label { color: var(--term-acc); white-space: nowrap; }
+.ask-form input { flex: 1; min-width: 0; font: inherit; color: var(--term-fg); background: transparent; border: 0; outline: none; caret-color: var(--term-acc); }
+.ask-chips { display: flex; flex-wrap: wrap; gap: 6px; padding-block: 0 12px; padding-left: 14px; padding-right: 14px; }
+.ask-chips button { font: .74rem/1 var(--font-mono); color: var(--term-fg); background: transparent; border: 1px solid var(--term-rule); border-radius: 3px; padding: 5px 8px; cursor: pointer; }
+.ask-chips button:hover { border-color: var(--term-acc); color: var(--term-acc); }
+.more-info { font-size: .82rem; color: var(--muted); text-align: center; margin-top: 10px; line-height: 1.5; }
+.rq { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; max-width: 68ch; }
+.rq li { display: grid; grid-template-columns: 2.6rem 1fr; gap: 8px; }
+.rq li span { font-family: var(--font-mono); font-size: .8rem; color: var(--accent); padding-top: 3px; }
+.notice { border: 1px solid var(--rule); background: var(--soft); padding: 12px 16px; border-radius: 4px; max-width: 68ch; font-size: .95rem; }
+
+/* news */
+.news { width: 100%; border-collapse: collapse; }
+.news th { text-align: left; font-weight: 400; white-space: nowrap; vertical-align: top; padding: 6px 22px 6px 0; width: 8.5rem; font-variant-numeric: tabular-nums; color: var(--fg); }
+.news td { padding: 6px 0; vertical-align: top; }
+.news tr + tr th, .news tr + tr td { border-top: 1px dashed var(--rule); }
+
+/* publications */
+.year { font-size: 2rem; font-weight: 300; color: var(--rule); text-align: right; margin: 26px 0 -8px; font-variant-numeric: tabular-nums; }
+.bib { list-style: none; margin: 0; padding: 0; }
+.bib > li { display: grid; grid-template-columns: 170px 1fr; gap: 18px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+.bib > li:last-child { border-bottom: 0; }
+.pub-side { display: grid; gap: 8px; align-content: start; }
+.abbr { display: inline-block; justify-self: start; min-width: 76px; text-align: center; font-size: .75rem; font-weight: 500; letter-spacing: .04em; color: var(--badge-fg); padding: 2px 8px; border-radius: 2px; }
+.abbr.acadia { background: var(--badge-acadia); } .abbr.cdrf { background: var(--badge-cdrf); } .abbr.caadria { background: var(--badge-caadria); } .abbr.iass { background: var(--badge-iass); } .abbr.other { background: var(--badge-other); }
+.pub-thumb { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 3px; border: 1px solid var(--rule); background: var(--soft); }
+.pub-body { min-width: 0; }
+.pub-title { font-weight: 500; margin: 0 0 2px; }
+.pub-authors { margin: 0; font-size: .95rem; }
+.pub-authors em.me { font-style: normal; font-weight: 500; border-bottom: 1px solid currentColor; }
+.pub-venue { margin: 0; font-size: .95rem; font-style: italic; color: var(--muted); }
+.pub-status { font-style: normal; font-size: .8rem; color: var(--accent); }
+.links { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.btn { font: 400 .72rem/1 var(--font-body); letter-spacing: .06em; text-transform: uppercase; color: var(--fg); background: none; border: 1px solid var(--fg); border-radius: 3px; padding: 5px 9px; cursor: pointer; }
+.btn:hover, .btn[aria-expanded="true"] { color: var(--accent); border-color: var(--accent); text-decoration: none; }
+.pub-panel { margin-top: 10px; font-size: .92rem; }
+.pub-panel p { margin: 0; max-width: 72ch; }
+.pub-panel pre { margin: 0; overflow-x: auto; background: var(--soft); border: 1px solid var(--rule); padding: 10px 12px; font: .78rem/1.5 var(--font-mono); border-radius: 3px; }
+
+/* projects */
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+.chip { font: 400 .82rem/1 var(--font-body); border: 1px solid var(--rule); background: var(--bg); color: var(--fg); padding: 7px 12px; border-radius: 999px; cursor: pointer; }
+.chip[aria-pressed="true"] { border-color: var(--accent); color: var(--accent); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 22px; }
+.card { display: flex; flex-direction: column; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; color: var(--fg); background: var(--bg); transition: transform .15s ease, box-shadow .15s ease; }
+.card:hover { text-decoration: none; transform: translateY(-2px); box-shadow: 0 6px 18px -10px rgba(0,0,0,.35); }
+.card img { width: 100%; aspect-ratio: 16/10; object-fit: cover; background: var(--soft); border-bottom: 1px solid var(--rule); }
+.card-body { padding: 14px 16px 16px; display: grid; gap: 6px; }
+.card h3 { font-size: 1.02rem; font-weight: 500; margin: 0; line-height: 1.35; }
+.card p { margin: 0; font-size: .9rem; color: var(--muted); }
+.card .meta { font: .72rem/1.4 var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: .04em; }
+.card[hidden] { display: none; }
+
+/* project detail */
+.back { font-size: .9rem; display: inline-block; margin-bottom: 18px; }
+.facts { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; margin: 0 0 24px; font-size: .93rem; }
+.facts dt { color: var(--muted); }
+.facts dd { margin: 0; min-width: 0; }
+.hero-fig { margin: 0 0 24px; }
+.hero-fig img { width: 100%; max-height: 520px; object-fit: cover; border-radius: 4px; }
+figcaption { font-size: .82rem; color: var(--muted); margin-top: 6px; text-align: center; }
+.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin: 22px 0; }
+.figs figure { margin: 0; }
+.figs img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 4px; border: 1px solid var(--rule); background: var(--soft); }
+.figs img.contain { object-fit: contain; background: #fff; }
+.figs.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.figs.ptiles { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+.figs.ptiles img { aspect-ratio: 3/4; }
+.figs.ptiles { gap: 12px; margin-block: 12px; }
+.figs.ptiles figcaption { font-size: .76rem; }
+.figs.ptiles.row2 { grid-template-columns: repeat(2, minmax(0, 210px)); }
+.figs.ptiles.row5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+@media (max-width: 640px) { .figs.ptiles.row5 { grid-template-columns: repeat(3, minmax(0, 1fr)); } .figs.ptiles.row2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 520px) { .figs.two { grid-template-columns: 1fr; } }
+.prose h3 { font-size: 1.05rem; font-weight: 500; margin: 26px 0 8px; }
+.prose p, .prose ul { max-width: 70ch; margin: 0 0 12px; }
+.prose ul { padding-left: 1.2rem; }
+.prose li { margin-bottom: 4px; }
+.kpis { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 6px 0 18px; }
+.kpi b { display: block; font-size: 1.5rem; font-weight: 400; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1.2; }
+.kpi span { font-size: .8rem; color: var(--muted); }
+
+/* cv */
+.cv-entry { display: grid; grid-template-columns: 9.5rem 1fr; gap: 16px; padding: 12px 0; border-bottom: 1px dashed var(--rule); }
+.cv-entry:last-child { border-bottom: 0; }
+.cv-date { font-variant-numeric: tabular-nums; font-size: .9rem; color: var(--muted); }
+.cv-date .badge { display: inline-block; border: 1px solid var(--accent); color: var(--accent); border-radius: 3px; padding: 1px 6px; font-size: .78rem; }
+.cv-main { min-width: 0; }
+.cv-main h3 { font-size: 1rem; font-weight: 500; margin: 0; }
+.cv-main .where { margin: 0; color: var(--muted); font-size: .93rem; }
+.cv-main ul { margin: 6px 0 0; padding-left: 1.1rem; font-size: .93rem; }
+.skills { display: grid; grid-template-columns: 11rem 1fr; gap: 8px 16px; font-size: .93rem; }
+.skills dt { font-weight: 400; color: var(--muted); }
+.skills dd { margin: 0; min-width: 0; }
+
+/* background canvas, typing brand, caret on titles */
+#bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+.brand-name { display: inline-block; min-width: 12.5em; font-weight: 300; }
+.brand-name.is-bold { font-weight: 500; }
+.brand-name::after, .post-title::after { content: ""; display: inline-block; width: .08em; height: .9em; margin-left: .16em; transform: translateY(.12em); background: var(--accent); animation: caret 1.05s steps(1) infinite; }
+.post-title::after { width: .06em; }
+@keyframes caret { 0%, 48% { opacity: 1; } 49%, 100% { opacity: 0; } }
+.post-title .ch.pre { visibility: hidden; }
+.post-title.typing::after { animation: none; }
+@media (prefers-reduced-motion: reduce) { .brand-name::after, .post-title::after { animation: none; } }
+@media (max-width: 640px) { .brand-name { min-width: 0; } }
+
+.card { transform-style: preserve-3d; will-change: transform; }
+.card.tilting { transition: box-shadow .15s ease; }
+
+/* videos */
+.figs video, .hero-fig video { display: block; width: 100%; border-radius: 4px; border: 1px solid var(--rule); background: #fff; cursor: zoom-in; }
+.figs video { aspect-ratio: 4/3; object-fit: cover; }
+.figs video.contain { object-fit: contain; }
+.hero-fig video { max-height: 520px; object-fit: contain; }
+.figs.tall { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+.figs.tall video { aspect-ratio: 684/1076; object-fit: contain; }
+.card .card-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .35s ease; background: #fff; }
+.card:hover .card-vid { opacity: 1; }
+.card .ph img.fit, .card .card-vid.fit { object-fit: contain; }
+
+/* image that pops up beside the cursor (Gradient Matter bracelet) */
+.pop-float { position: fixed; top: 0; left: 0; z-index: 45; width: 210px; pointer-events: none; border-radius: 6px; overflow: hidden; border: 1px solid var(--rule); background: var(--bg); box-shadow: 0 18px 40px -16px rgba(0,0,0,.5); opacity: 0; transform: translate3d(-999px,-999px,0); transition: opacity .25s ease; will-change: transform; }
+.pop-float.on { opacity: 1; }
+.pop-float img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+.pop-float video { width: 100%; aspect-ratio: 600/1072; max-height: 300px; object-fit: contain; display: block; background: #fff; }
+.pop-float span { display: block; padding: 6px 10px; font-size: .74rem; color: var(--muted); }
+[data-pop] { cursor: zoom-in; }
+.lightbox video { max-width: min(1100px, 100%); max-height: 78vh; border-radius: 4px; background: #fff; }
+
+/* tool */
+.tool { display: grid; grid-template-columns: 132px 1fr; gap: 22px; align-items: start; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); padding-block: 22px; padding-left: 22px; padding-right: 22px; }
+.tool-icon { width: 132px; height: 132px; border: 1px solid var(--rule); border-radius: 22px; background: var(--soft); display: grid; place-items: center; cursor: pointer; transition: transform .25s cubic-bezier(.2,.7,.2,1), border-color .25s ease, box-shadow .25s ease; padding: 0; color: var(--fg); }
+.tool-icon:hover { transform: translateY(-3px) rotate(-2deg); border-color: var(--accent); box-shadow: 0 14px 28px -16px rgba(0,0,0,.4); }
+.tool-icon img { width: 92px; height: 92px; object-fit: contain; }
+.tool-body { min-width: 0; }
+.tool-body h2 { margin: 0; font-size: 1.5rem; font-weight: 400; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.wip { font: 500 .7rem/1 var(--font-mono); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 4px 7px; }
+.tool-body p { margin: 8px 0 0; max-width: 64ch; }
+.tool-meta { font-size: .88rem; color: var(--muted); }
+.docs { position: fixed; inset: 0; z-index: 60; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(6px); overflow-y: auto; padding-block: max(24px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.docs[hidden] { display: none; }
+.docs-panel { position: relative; max-width: 820px; margin: 0 auto; background: var(--bg); border: 1px solid var(--rule); border-radius: 6px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.5); padding-block: 26px 30px; padding-left: clamp(18px, 4vw, 36px); padding-right: clamp(18px, 4vw, 36px); animation: lbIn .35s cubic-bezier(.2,.7,.2,1); }
+.docs-panel h2 { font-size: 1.6rem; font-weight: 400; margin: 0 0 4px; }
+.docs-panel h3 { font-size: 1rem; font-weight: 500; color: var(--accent); margin: 26px 0 8px; }
+.docs-panel p, .docs-panel li { max-width: 68ch; }
+.docs-close { position: absolute; top: 16px; right: 16px; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; counter-reset: st; }
+.steps li { counter-increment: st; display: grid; grid-template-columns: 2.2rem 1fr auto; gap: 10px; padding: 9px 0; border-bottom: 1px dashed var(--rule); align-items: baseline; }
+.steps li::before { content: counter(st, decimal-leading-zero); font: .78rem var(--font-mono); color: var(--muted); }
+.steps b { font-weight: 500; }
+.steps .st { font: .68rem/1 var(--font-mono); text-transform: uppercase; letter-spacing: .05em; padding: 4px 6px; border-radius: 3px; border: 1px solid var(--rule); color: var(--muted); white-space: nowrap; }
+.steps .st.ok { border-color: var(--badge-caadria); color: var(--badge-caadria); }
+.steps .st.proto { border-color: var(--badge-iass); color: var(--badge-iass); }
+.steps span.d { display: block; font-size: .88rem; color: var(--muted); }
+.docs-head { display: flex; align-items: center; gap: 14px; }
+.docs-head img { width: 56px; height: 56px; object-fit: contain; }
+.comp-sec h4 { font: 500 .78rem/1 var(--font-mono); letter-spacing: .05em; text-transform: uppercase; color: var(--muted); margin: 16px 0 6px; }
+.comps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 18px; }
+.comps li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; padding: 6px 0; }
+.comps img { width: 24px; height: 24px; image-rendering: pixelated; margin-top: 2px; }
+.comps b { font-weight: 500; display: block; font-size: .93rem; }
+.comps span { font-size: .84rem; color: var(--muted); display: block; line-height: 1.45; }
+.flow { padding-left: 1.2rem; margin: 0; }
+.flow li { margin-bottom: 6px; }
+@media (max-width: 640px) { .tool { grid-template-columns: 1fr; } .tool-icon { width: 100px; height: 100px; } }
+
+/* publication preview that follows the cursor */
+.pub-float { position: fixed; top: 0; left: 0; z-index: 40; width: 260px; pointer-events: none; border-radius: 4px; overflow: hidden; border: 1px solid var(--rule); background: var(--bg); box-shadow: 0 14px 34px -14px rgba(0,0,0,.45); opacity: 0; transform: translate3d(-999px,-999px,0) scale(.9); transition: opacity .2s ease; will-change: transform; }
+.pub-float.on { opacity: 1; }
+.pub-float img { width: 100%; aspect-ratio: 4/3; object-fit: cover; }
+.bib > li { transition: background-color .2s ease; }
+.bib > li.hov { background: var(--soft); }
+
+/* lightbox */
+.zoomable { cursor: zoom-in; }
+.lightbox { position: fixed; inset: 0; z-index: 60; display: grid; grid-template-rows: 1fr auto; place-items: center; gap: 10px; background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: blur(6px); padding-block: max(20px, env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-bottom, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.lightbox[hidden] { display: none; }
+.lightbox img { max-width: min(1100px, 100%); max-height: 78vh; object-fit: contain; border-radius: 4px; box-shadow: 0 20px 50px -20px rgba(0,0,0,.5); background: #fff; animation: lbIn .35s cubic-bezier(.2,.7,.2,1); }
+@keyframes lbIn { from { opacity: .3; transform: scale(.96); } to { opacity: 1; transform: none; } }
+.lb-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
+.lb-cap { font-size: .9rem; color: var(--fg); text-align: center; max-width: 60ch; }
+.lb-count { font-family: var(--font-mono); font-size: .78rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.lb-close { position: absolute; top: max(14px, env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* name letters lift toward the cursor */
+.post-title .ch { display: inline-block; transition: transform .25s cubic-bezier(.2,.7,.2,1), color .25s ease; white-space: pre; }
+
+/* portrait tilt */
+.portrait { transition: transform .4s cubic-bezier(.2,.7,.2,1), box-shadow .4s ease; }
+.portrait.tilt { transition: transform .08s linear, box-shadow .4s ease; box-shadow: 0 18px 36px -18px rgba(0,0,0,.45); }
+
+/* reading progress */
+.progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--accent); transform-origin: 0 50%; transform: scaleX(0); pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) { .pub-float, .lightbox img, .post-title .ch, .portrait { animation: none; transition: none; } }
+
+
+/* hover swaps an image for its animation in place */
+.swap-box { position: relative; overflow: hidden; border-radius: 4px; }
+.swap-box .swap-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #fff; opacity: 0; transition: opacity .35s ease; pointer-events: none; border: 0; }
+.swap-box:hover .swap-vid { opacity: 1; }
+.hero-fig.swap .swap-box { aspect-ratio: 1184/864; max-height: 560px; background: #fff; }
+.hero-fig.swap .swap-box img, .hero-fig.swap .swap-box .swap-vid { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; object-fit: contain; border: 0; border-radius: 0; }
+.pub-box { border-radius: 3px; }
+.pub-box .swap-vid { border-radius: 3px; }
+
+
+/* research loop diagram */
+.loop { display: grid; grid-template-columns: 30px minmax(0, 1fr) 30px; column-gap: 10px; max-width: 760px; margin: 18px 0 26px; }
+.pillar { grid-column: 2; border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); padding-block: 12px; padding-left: 14px; padding-right: 14px; display: grid; gap: 4px; transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease; }
+.pillar:hover { border-color: var(--accent); transform: translateY(-1px); box-shadow: 0 8px 18px -14px rgba(0,0,0,.5); }
+.pillar b { font-weight: 500; }
+.pillar i { font-style: normal; font: .74rem var(--font-mono); color: var(--accent); margin-right: 6px; }
+.pillar span { font-size: .9rem; color: var(--muted); }
+.pillar em { font-style: normal; font-size: .8rem; color: var(--muted); }
+.conn { grid-column: 2; display: flex; justify-content: space-between; align-items: center; padding-block: 2px; padding-left: 18px; padding-right: 4px; font-size: .78rem; color: var(--muted); }
+.conn .dn { font-size: 1rem; color: var(--fg); }
+.conn .up { font-family: var(--font-mono); color: var(--accent); text-align: right; }
+.rail { position: relative; border: 1.5px dashed var(--accent); opacity: .55; margin-block: 22px; transition: opacity .2s ease; }
+.rail-l { grid-column: 1; border-right: 0; border-radius: 10px 0 0 10px; }
+.rail-r { grid-column: 3; border-left: 0; border-radius: 0 10px 10px 0; }
+.rail span { position: absolute; top: 50%; writing-mode: vertical-rl; transform: translate(-50%, -50%) rotate(180deg); left: 50%; white-space: nowrap; font: .68rem var(--font-mono); color: var(--accent); background: var(--bg); padding-block: 6px; }
+.rail-r span { transform: translate(-50%, -50%); }
+.loop:hover .rail { opacity: .9; }
+@media (max-width: 640px) { .rail span { display: none; } .loop { grid-template-columns: 14px minmax(0, 1fr) 14px; column-gap: 6px; } .conn .up { font-size: .7rem; } }
+
+
+.fitex { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 20px; align-items: start; }
+.fitex figure { margin: 0; }
+.fitex img { width: 100%; border-radius: 4px; border: 1px solid var(--rule); }
+table.mini { border-collapse: collapse; margin-top: 12px; font-size: .84rem; font-variant-numeric: tabular-nums; }
+table.mini caption { text-align: left; color: var(--muted); font-size: .78rem; padding-bottom: 4px; }
+table.mini th, table.mini td { padding: 3px 14px 3px 0; text-align: left; border-bottom: 1px dashed var(--rule); }
+table.mini th { font-weight: 500; }
+@media (max-width: 640px) { .fitex { grid-template-columns: 1fr; } }
+
+/* beyond Earth */
+.horizon { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 760px; margin: 14px 0 6px; }
+.horizon div { border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); padding-block: 12px; padding-left: 14px; padding-right: 14px; }
+.horizon b { display: block; font-weight: 500; margin-bottom: 4px; }
+.horizon i { font-style: normal; font: .72rem var(--font-mono); color: var(--accent); display: block; margin-bottom: 2px; }
+.horizon span { font-size: .88rem; color: var(--muted); }
+@media (max-width: 520px) { .horizon { grid-template-columns: 1fr; } }
+
+
+
+
+/* image credits */
+.credits-note { margin: 28px 0 0; padding-top: 10px; border-top: 1px dashed var(--rule); font-size: .76rem; color: var(--muted); max-width: 72ch; }
+.pub-credit { font-size: .64rem; color: var(--muted); line-height: 1.3; }
+
+
+/* research question, gaps */
+.rq-main { max-width: 760px; border-left: 2px solid var(--accent); padding-block: 4px; padding-left: 16px; padding-right: 0; margin: 6px 0 18px; }
+.rq-main span { font: .72rem var(--font-mono); color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
+.rq-main p { margin: 4px 0 0; font-size: 1.05rem; line-height: 1.55; }
+h3.sub { font-size: .95rem; font-weight: 500; margin: 22px 0 8px; }
+.gaps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; max-width: 760px; }
+.gaps div { border: 1px solid var(--rule); border-radius: 4px; background: var(--bg); padding-block: 12px; padding-left: 14px; padding-right: 14px; display: grid; gap: 4px; align-content: start; }
+.gaps i { font-style: normal; font: .72rem var(--font-mono); color: var(--accent); }
+.gaps b { font-weight: 500; }
+.gaps span { font-size: .88rem; color: var(--muted); }
+.gaps em { font-style: normal; font-size: .74rem; color: var(--muted); opacity: .85; }
+.pillar small { font: .7rem var(--font-mono); color: var(--accent); font-weight: 400; }
+@media (max-width: 560px) { .gaps { grid-template-columns: 1fr; } }
+
+/* fun facts */
+.facts-card { position: relative; max-width: 68ch; border: 1px solid var(--rule); border-radius: 4px; background: var(--soft); padding-block: 18px 14px; padding-left: 20px; padding-right: 20px; cursor: pointer; user-select: none; overflow: hidden; }
+.facts-card:hover { border-color: var(--accent); }
+.fact-text { margin: 0; font-size: 1.08rem; line-height: 1.55; min-height: 3.2em; }
+.fact-text.swap { animation: factIn .45s cubic-bezier(.2,.7,.2,1); }
+@keyframes factIn { from { opacity: .2; transform: translateX(14px); } to { opacity: 1; transform: none; } }
+.fact-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.fact-dots { display: flex; gap: 6px; flex-wrap: wrap; }
+.fact-dots button { width: 9px; height: 9px; padding: 0; border-radius: 50%; border: 1px solid var(--accent); background: transparent; cursor: pointer; }
+.fact-dots button[aria-current="true"] { background: var(--accent); }
+.fact-btns { display: flex; gap: 6px; }
+.fact-src { font-size: .78rem; color: var(--muted); margin: 6px 0 0; }
+@media (prefers-reduced-motion: reduce) { .fact-text.swap { animation: none; } }
+
+/* view entrance: starts visible, settles in */
+@keyframes settle { from { opacity: .35; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+[data-view].on > * { animation: settle .5s cubic-bezier(.2,.7,.2,1) both; }
+[data-view].on > *:nth-child(2) { animation-delay: .04s; }
+[data-view].on > *:nth-child(3) { animation-delay: .08s; }
+[data-view].on > *:nth-child(4) { animation-delay: .12s; }
+[data-view].on > *:nth-child(n+5) { animation-delay: .16s; }
+
+/* project card images */
+.card .ph { position: relative; overflow: hidden; border-bottom: 1px solid var(--rule); }
+.card .ph img { border-bottom: 0; transition: transform .6s cubic-bezier(.2,.7,.2,1); }
+.card:hover .ph img { transform: scale(1.06) rotate(-.6deg); }
+.figs img, .hero-fig img { transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.figs figure { overflow: hidden; border-radius: 4px; }
+.figs figure:hover img { transform: scale(1.03); }
+@media (prefers-reduced-motion: reduce) {
+  [data-view].on > * { animation: none; }
+  .card:hover .ph img, .figs figure:hover img { transform: none; }
+}
+
+/* footer */
+.social { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 22px; margin: 48px 0 6px; font-size: .92rem; }
+.social a { color: var(--fg); }
+.social a:hover { color: var(--accent); }
+.email-row { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; font-size: .92rem; color: var(--muted); }
+.email-row code { font-family: var(--font-mono); font-size: .85rem; color: var(--fg); user-select: all; }
+footer { border-top: 1px solid var(--rule); color: var(--muted); font-size: .8rem; text-align: center; padding-block: 16px 24px; margin-top: 32px; }
+
+@media (max-width: 640px) {
+  .post-title { font-size: 1.9rem; }
+  .profile { float: none; width: 200px; margin: 0 auto 20px; }
+  .bib > li { grid-template-columns: 1fr; gap: 10px; }
+  .pub-thumb { max-width: 260px; }
+  .cv-entry, .skills { grid-template-columns: 1fr; gap: 2px; }
+  .news th { width: auto; padding-right: 12px; }
+  .nav ul { gap: 2px 14px; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="bg" aria-hidden="true"></canvas>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#about" aria-label="Yuxing Liu, home"><span class="brand-name is-bold" aria-hidden="true"><span class="brand-text">Yuxing Liu</span></span></a>
+    <ul>
+      <li><a href="#about">about</a></li>
+      <li><a href="#publications">publications</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#tool">tool</a></li>
+      <li><a href="#cv">cv</a></li>
+      <li><a href="#teaching">teaching</a></li>
+      <li><button class="theme-btn" id="themeBtn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.4 5.4 0 0 1-9.54-4.64A5.4 5.4 0 0 1 13.36 3.1C12.92 3.04 12.46 3 12 3z"/></svg></button></li>
+    </ul>
+  </div>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+</header>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Figure viewer" hidden>
+  <button class="btn lb-close" type="button" id="lbClose">close ✕</button>
+  <img id="lbImg" alt="">
+  <video id="lbVid" muted loop playsinline controls hidden></video>
+  <div class="lb-bar">
+    <button class="btn" type="button" id="lbPrev">← prev</button>
+    <span class="lb-count" id="lbCount"></span>
+    <button class="btn" type="button" id="lbNext">next →</button>
+    <div class="lb-cap" id="lbCap" style="flex-basis:100%"></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+<!-- ============ ABOUT ============ -->
+<section data-view="about" class="on" aria-label="About">
+  <h1 class="post-title"><b>Yuxing</b> (Estella) Liu</h1>
+  <p class="post-desc">Material programming · 4D printing · ML-driven inverse design · closed-loop robotic fabrication</p>
+
+  <div class="about-grid">
+    <div class="profile">
+      <div class="portrait">
+        <svg class="avatar" id="avatar" viewBox="0 0 400 500" role="img" aria-label="Illustrated avatar of Yuxing Liu">
+          <defs>
+            <clipPath id="eyeL"><ellipse cx="170" cy="204" rx="14" ry="9.5"/></clipPath>
+            <clipPath id="eyeR"><ellipse cx="230" cy="204" rx="14" ry="9.5"/></clipPath>
+          </defs>
+          <rect width="400" height="500" fill="#fbe9ef"/>
+          <circle cx="320" cy="90" r="70" fill="#f6d3df"/>
+          <path d="M96 200 C 92 110, 150 62, 202 62 C 258 62, 312 108, 306 205 C 304 280, 318 360, 330 430 L 72 430 C 86 360, 98 280, 96 200 Z" fill="#1d1a1f"/>
+          <path d="M176 300 L 224 300 L 230 362 L 170 362 Z" fill="#f0cdbb"/>
+          <path d="M176 318 C 192 330, 210 330, 224 318 L 226 336 C 208 346, 192 346, 174 336 Z" fill="#e2b8a4"/>
+          <path d="M60 500 C 64 420, 110 376, 170 356 L 200 420 L 230 356 C 290 376, 336 420, 340 500 Z" fill="#1f1f24"/>
+          <path d="M170 356 L 200 420 L 186 500 L 150 500 L 160 400 Z" fill="#2c2c33"/>
+          <path d="M230 356 L 200 420 L 214 500 L 250 500 L 240 400 Z" fill="#2c2c33"/>
+          <path d="M176 358 L 200 420 L 224 358 C 214 372, 186 372, 176 358 Z" fill="#f0cdbb"/>
+          <ellipse cx="200" cy="212" rx="78" ry="98" fill="#f6d9c9"/>
+          <ellipse cx="122" cy="222" rx="12" ry="20" fill="#efc9b6"/>
+          <ellipse cx="278" cy="222" rx="12" ry="20" fill="#efc9b6"/>
+          <path d="M120 200 C 118 140, 152 104, 204 102 C 252 102, 284 138, 282 196 C 268 160, 240 132, 206 128 C 172 132, 140 158, 120 200 Z" fill="#1d1a1f"/>
+          <path d="M112 196 C 108 260, 110 330, 96 420 L 128 420 C 132 340, 128 270, 132 214 Z" fill="#1d1a1f"/>
+          <path d="M288 196 C 292 260, 290 330, 304 420 L 272 420 C 268 340, 272 270, 268 214 Z" fill="#1d1a1f"/>
+          <path class="brow" d="M150 182 C 162 174, 180 174, 190 180" fill="none" stroke="#4a3a36" stroke-width="5" stroke-linecap="round"/>
+          <path class="brow" d="M210 180 C 220 174, 238 174, 250 182" fill="none" stroke="#4a3a36" stroke-width="5" stroke-linecap="round"/>
+          <ellipse cx="170" cy="204" rx="14" ry="9.5" fill="#ffffff"/>
+          <ellipse cx="230" cy="204" rx="14" ry="9.5" fill="#ffffff"/>
+          <g clip-path="url(#eyeL)"><g class="pupil" data-cx="170" data-cy="204"><circle cx="170" cy="204" r="7.5" fill="#3b2a24"/><circle cx="170" cy="204" r="3.6" fill="#140e0c"/><circle cx="172.6" cy="201.4" r="2.1" fill="#ffffff"/></g></g>
+          <g clip-path="url(#eyeR)"><g class="pupil" data-cx="230" data-cy="204"><circle cx="230" cy="204" r="7.5" fill="#3b2a24"/><circle cx="230" cy="204" r="3.6" fill="#140e0c"/><circle cx="232.6" cy="201.4" r="2.1" fill="#ffffff"/></g></g>
+          <rect class="lid" x="154" y="193" width="32" height="22" fill="#f6d9c9"/>
+          <rect class="lid" x="214" y="193" width="32" height="22" fill="#f6d9c9"/>
+          <path d="M156 204 C 162 196, 178 195, 185 202" fill="none" stroke="#2a1f1c" stroke-width="2.4" stroke-linecap="round"/>
+          <path d="M215 202 C 222 195, 238 196, 244 204" fill="none" stroke="#2a1f1c" stroke-width="2.4" stroke-linecap="round"/>
+          <ellipse cx="150" cy="242" rx="16" ry="9" fill="#f0b3a6" opacity=".55"/>
+          <ellipse cx="250" cy="242" rx="16" ry="9" fill="#f0b3a6" opacity=".55"/>
+          <path d="M200 214 C 198 228, 196 236, 200 240" fill="none" stroke="#d9a892" stroke-width="3" stroke-linecap="round"/>
+          <path class="mouth" d="M180 264 C 192 274, 210 274, 222 264" fill="none" stroke="#c9787a" stroke-width="5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="more-info">M.Sc. ITECH, University of Stuttgart<br>Research Assistant, ICD / IntCDC<br>Stuttgart, Germany</div>
+    </div>
+
+    <div class="lead">
+      <p>I study how to <strong>program the behaviour of materials</strong> and how to build the computational and robotic workflows that make that behaviour designable. My current work uses 4D-printed wood–PLA bilayers that bend when humidity changes. I control that bending through <strong>gradient porosity</strong>: a designer specifies a target curved surface, and an inverse-design pipeline returns a fabrication-ready print.</p>
+      <p>I am an M.Sc. student in <a href="https://www.itech-master.de/" target="_blank" rel="noopener">ITECH</a> at the University of Stuttgart and a graduate research assistant at the Institute for Computational Design and Construction (ICD) and the Cluster of Excellence IntCDC. I work on the <em>ArchiBioFoam</em> bio-based foam project (Horizon Europe EIC Pathfinder), the <em>RAW</em> reclaimed-materials knowledge graph (Horizon Europe), and robotic assembly in IntCDC's Large-Scale Construction Robotics Laboratory (LCRL). Before that I began doctoral research at the Bartlett, UCL, with Prof. Marjan Colletti and Dr. Kostas Grigoriadis, and studied at the University of Pennsylvania (MSD-AAD, GPA 3.84) and Suzhou University of Science and Technology (B.Arch, ranked 1st in cohort).</p>
+      <p>Of the three links in the chain of material, design and fabrication, the one I care about most is the <strong>material</strong>. Over the long term I want to learn where machine learning genuinely speeds up that chain: choosing which experiment to run next, replacing slow simulation with surrogate models, and feeding sensor data from fabrication back into the material model.</p>
+    </div>
+  </div>
+
+  <div class="notice">I am applying to <strong>PhD programs for Fall 2027</strong> in material-informed design, digital fabrication and computational design. <a href="#research">Research direction ↓</a></div>
+
+  <div class="facts-card" style="margin-top:28px" id="factCard" role="group" aria-roledescription="carousel" aria-label="Fun facts" tabindex="0">
+    <p class="fact-text" id="factText" aria-live="polite"></p>
+    <div class="fact-bar">
+      <div class="fact-dots" id="factDots" role="tablist" aria-label="Choose a fact"></div>
+      <div class="fact-btns">
+        <button class="btn" type="button" id="factShuffle">shuffle</button>
+        <button class="btn" type="button" id="factNext">next fact →</button>
+      </div>
+    </div>
+  </div>
+  <p class="fact-src">Click the card, press → or use the buttons.</p>
+
+  <div class="ask" id="ask">
+    <div class="ask-bar"><i></i><i></i><i></i><span>ask about my work · type a question or a command</span></div>
+    <div class="ask-log" id="askLog" aria-live="polite"></div>
+    <form class="ask-form" id="askForm" autocomplete="off">
+      <label for="askIn">visitor@yuxing:~$</label>
+      <input id="askIn" type="text" placeholder="try: what is DeformMatter?" spellcheck="false">
+    </form>
+    <div class="ask-chips" id="askChips">
+      <button type="button">help</button><button type="button">research</button><button type="button">publications</button><button type="button">robots</button><button type="button">deformmatter</button><button type="button">contact</button>
+    </div>
+  </div>
+
+  <h2 class="sec" id="research">research direction: closed-loop material–structure–process co-optimisation</h2>
+  <div class="rq-main"><span>research question</span><p>How can an evolving material library, uncertainty-aware inverse design and sensor-guided fabrication be integrated into a closed-loop framework that jointly optimises material selection, structural design and manufacturing processes, while improving design fidelity through physical validation and feedback?</p></div>
+
+  <h3 class="sub">Gaps</h3>
+  <div class="gaps">
+    <div><i>gap 1</i><b>Fragmented material knowledge</b><span>Material knowledge sits in literature, databases and lab systems, and new experimental and fabrication results rarely flow back into a reusable, provenance-aware library that supports design.</span><em>Himanen et al. 2019 · Gupta et al. 2022 · MacLeod et al. 2020 · Szymanski et al. 2023</em></div>
+    <div><i>gap 2</i><b>Material, structure and fabrication optimised apart</b><span>Inverse design is usually tied to one material system or process. Jointly optimising discrete material choices, material distributions, geometry and process parameters under uncertain properties remains hard.</span><em>Bessa et al. 2019 · Gladman et al. 2016</em></div>
+    <div><i>gap 3</i><b>Fabrication feedback stops at the machine</b><span>In-situ sensing mostly catches defects or tunes process parameters. It rarely tells whether a deviation came from the material, the model or the process, or changes upstream design decisions.</span><em>Chen et al. 2024 · Choi et al. 2026</em></div>
+    <div><i>gap 4</i><b>Uncertain transfer across scales</b><span>Behaviour validated on lab specimens may not hold for larger components, where material variability, tolerances and boundary conditions add new uncertainty.</span><em>Keating et al. 2017 · Cheng et al. 2021</em></div>
+  </div>
+
+  <h3 class="sub">Proposed framework</h3>
+  <div class="lead"><p>An experimentally grounded loop. Machine learning comes in where it is the most efficient solution, for extracting material data, choosing the next experiment and replacing slow simulation, not as an end in itself. The first application is sustainable, robotically fabricated composite building components; architecture, engineering and construction is the focus, not the limit, of the method.</p></div>
+  <div class="loop" aria-label="Diagram of the proposed closed-loop framework">
+    <div class="rail rail-l" style="grid-row:1/6"><span>failure-informed feedback: new experiments or material re-selection</span></div>
+    <div class="pillar" data-p="1" style="grid-row:1"><b><i>01</i> Evolving material library <small>· gap 1</small></b><span>Literature, supplier data and lab records plus new formulation and testing, merged into a provenance-aware library with checked units and test conditions. Uncertainty-aware models pick the most informative next experiment. Failed formulations are kept too.</span><em>so far: <a href="#tool">SMP Curvature Tool</a> · <a href="#tool">DeformMatter</a> · ArchiBioFoam · RAW knowledge graph</em></div>
+    <div class="conn" style="grid-row:2"><span class="dn">↓</span><span class="up">↑ uncertainty triggers informative experiments</span></div>
+    <div class="pillar" data-p="2" style="grid-row:3"><b><i>02</i> Material-aware inverse design &amp; co-optimisation <small>· gap 2</small></b><span>Physics-constrained generative methods, uncertainty-aware surrogates and mixed discrete–continuous multi-objective optimisation choose material, spatial distribution, geometry and process parameters together, for fidelity, performance, material efficiency and feasibility.</span><em>so far: <a href="#gradient-matter">Gradient Matter</a> · <a href="#tool">DeformMatter</a> · <a href="#growing-vase">Growing Vase</a></em></div>
+    <div class="conn" style="grid-row:4"><span class="dn">↓</span><span class="up">↑ inverse-design revision</span></div>
+    <div class="pillar" data-p="3" style="grid-row:5"><b><i>03</i> Sensor-guided fabrication &amp; failure-informed re-optimisation <small>· gap 3</small></b><span>Real-time sensing, deviation detection and adaptive control during fabrication. Deviations are diagnosed as material, model or process problems and routed to the right fix: more experiments, re-selection, design revision or new process settings.</span><em>so far: <a href="#cure">C.U.R.E.</a> · <a href="#robotic-knot">Robotic Knots</a> · <a href="#plant">The Self-Pleasuring Plant</a></em></div>
+    <div class="conn" style="grid-row:6"><span class="dn">↓</span><span class="up">↑ deviation diagnosis</span></div>
+    <div class="pillar" data-p="4" style="grid-row:7"><b><i>04</i> AEC demonstration &amp; scale-aware validation <small>· gap 4</small></b><span>Staged validation from material specimens to small structural prototypes and a larger component-level demonstrator, testing whether predictions and optimised designs still hold as scale and manufacturing conditions change.</span><em>so far: specimen-level validation in <a href="#gradient-matter">Gradient Matter</a> and <a href="#material-in-formation">Material In-Formation</a></em></div>
+    <div class="rail rail-r" style="grid-row:3/8"><span>validation updates the library and the design models</span></div>
+  </div>
+
+  <h2 class="sec" id="beyond-earth">long-term horizon: material intelligence beyond Earth</h2>
+  <div class="lead"><p>Building on the Moon or Mars is the hardest test of the loop above. Every gap gets sharper there: material knowledge is thin, material, structure and process cannot be planned apart, nobody is on site to read a failure, and nothing can be tested at full scale before it is built. If the framework can work there, it will be far more robust here.</p></div>
+  <div class="horizon">
+    <div><i>01 · evolving material library</i><b>Learning local materials from few samples</b><span>Regolith-based and in-situ composites start almost uncharacterised. A provenance-aware library has to grow from a handful of tests, including the ones that fail.</span></div>
+    <div><i>02 · co-optimisation</i><b>Material, structure and process as one decision</b><span>With scarce material and limited machines, the mix, the geometry and the fabrication plan must be chosen together, under uncertain properties, temperature swings and vacuum.</span></div>
+    <div><i>03 · failure-informed feedback</i><b>Robots that diagnose their own deviations</b><span>With no operator on site, the system itself must tell a material problem from a model or process error and choose the fix: test again, re-select, redesign or adjust.</span></div>
+    <div><i>04 · scale-aware validation</i><b>From Earth samples to off-world components</b><span>Specimens and prototypes tested on Earth have to predict components built in another gravity and climate, so transfer across scales and conditions is the core question.</span></div>
+  </div>
+  <p class="fact-src" style="max-width:68ch">This is a direction I want to grow into during a PhD, not work I have done yet.</p>
+</section>
+
+<!-- ============ PUBLICATIONS ============ -->
+<section data-view="publications" aria-label="Publications">
+  <h1 class="post-title">publications</h1>
+  <p class="post-desc">Peer-reviewed papers in reverse chronological order. <em class="me" style="font-style:normal;font-weight:500;border-bottom:1px solid currentColor">Underlined</em> marks my name.</p>
+  <div id="allPubs"></div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section data-view="projects" aria-label="Projects">
+  <h1 class="post-title">projects</h1>
+  <p class="post-desc">Research and studio projects on material behaviour, learning-based design and robotic fabrication. Select a project for methods, team and figures.</p>
+  <div class="filters" role="group" aria-label="Filter projects">
+    <button class="chip" type="button" data-filter="all" aria-pressed="true">all</button>
+    <button class="chip" type="button" data-filter="material" aria-pressed="false">material programming</button>
+    <button class="chip" type="button" data-filter="ml" aria-pressed="false">ML &amp; optimisation</button>
+    <button class="chip" type="button" data-filter="robotics" aria-pressed="false">robotic fabrication</button>
+    <button class="chip" type="button" data-filter="sim" aria-pressed="false">simulation &amp; ABM</button>
+  </div>
+  <div class="grid" id="projectGrid"></div>
+  <h2 class="sec">earlier design work</h2>
+  <div class="lead"><p>Earlier architectural and fabrication work from UPenn (2022–2023) and workshops in timber, ceramic 3D printing and earth materials is collected in my <a href="https://estellalyx.myportfolio.com/work" target="_blank" rel="noopener">design portfolio</a>. Two examples:</p></div>
+  <div class="figs">
+    <figure><img src="assets/img/graphic-statics.jpg" alt="Lightweight spatial structure designed with graphic statics" loading="lazy"><figcaption>2D Solution for 3D Problem: structure designed with graphic statics (UPenn, 2022)</figcaption></figure>
+    <figure><img src="assets/img/hypostyle.jpg" alt="Aggregated timber-like modules forming a hypostyle space" loading="lazy"><figcaption>Hypostyle: ecocentric architecture in Seville (UPenn, 2023)</figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ PROJECT DETAILS ============ -->
+<section data-view="gradient-matter" aria-label="Gradient Matter">
+  <a class="back" href="#publications">← publications</a>
+  <h1 class="post-title">Gradient Matter</h1>
+  <p class="post-desc">Multi-objective inverse design for 4D-printed hygromorphs through gradient porosity programming</p>
+  <figure class="hero-fig" data-pop="assets/img/gm-bracelet.jpg" data-pop-cap="A Gradient Matter panel worn as a bracelet"><img src="assets/img/gradient-matter.jpg" alt="A 4D-printed wood-PLA strip curled into a double spiral after drying"><figcaption>A complex-geometry panel after drying. Hover to see a printed panel worn as a bracelet.</figcaption></figure>
+  <dl class="facts">
+    <dt>Venue</dt><dd>ACADIA 2026, peer-reviewed full paper (first author)</dd>
+    <dt>Authors</dt><dd>Yuxing Liu, Yerong Huang, Achim Menges · ICD and IntCDC, University of Stuttgart</dd>
+    <dt>Methods</dt><dd>Physical experiments, Timoshenko-based synthetic data, surface-fitted forward equations, multi-objective optimisation (RBFMOpt), physical validation</dd>
+    <dt>Materials</dt><dd>Laywood meta5 (active layer) and PLA (passive layer), multi-material FDM</dd>
+    <dt>Support</dt><dd>EIC project ARCHIBIOFOAM (Horizon Europe, GA 101161052) and DFG EXC 2120/2 (IntCDC)</dd>
+  </dl>
+  <div class="kpis">
+    <div class="kpi"><b>18</b><span>porosity-gradient configurations, 3 repeats each</span></div>
+    <div class="kpi"><b>2.16°–5.14°</b><span>RMSE of the forward equations</span></div>
+    <div class="kpi"><b>0.1°–2.8°</b><span>deviation, P<sub>p</sub> validation at 24 h</span></div>
+  </div>
+  <div class="prose">
+    <h3>Research question</h3>
+    <p><em>How can a target curved surface be translated into a printable porosity distribution for a hygroscopic bilayer?</em></p>
+    <p>Hygromorphic systems are usually designed forward: choose material and print parameters, print, observe the shape, repeat. This work reverses that. You define the target shape, the solver finds the material and printing parameters, and the design intent becomes fabrication logic.</p>
+    <h3>Material system and design variables</h3>
+    <p>Moisture change makes the wood-filament layer swell or shrink while the PLA layer resists. The differential strain becomes curvature. Three variables shape the porosity field:</p>
+    <ul>
+      <li><strong>P<sub>p</sub></strong>, passive-layer porosity, sets the baseline.</li>
+      <li><strong>G<sub>a</sub></strong>, the gradient amplifier, controls the intensity. A larger G<sub>a</sub> means a bigger difference between rows.</li>
+      <li><strong>G<sub>t</sub></strong>, the gradient topology, shapes the field: radial outward (0), linear gradual (1) or radial inward (2).</li>
+    </ul>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/gm-variables.jpg" alt="Diagram of the design variables and gradient topologies" loading="lazy"><figcaption>Design variables and the three gradient topologies.</figcaption></figure>
+    <figure><img src="assets/img/gm-panels.jpg" alt="Three printed bilayer panels with different perforation gradients" loading="lazy"><figcaption>Printed panels with different porosity gradients.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Method: experiments + surrogate modelling + optimisation = inverse solver</h3>
+    <ul>
+      <li><strong>Physical experiments.</strong> 18 porosity-gradient configurations, each printed three times, soaked in water for 12 h and measured after 24 h and 72 h of drying. These are the empirical anchor points.</li>
+      <li><strong>Physics-supported surrogate.</strong> Timoshenko bilayer theory generates synthetic parameter sweeps around the anchors. Fitted response surfaces give fast, topology-specific forward equations (RMSE 2.16°–5.14°).</li>
+      <li><strong>Inverse solver.</strong> Target surface → panel targets by segmentation → search over G<sub>a</sub> and G<sub>t</sub> with the forward equations → Pareto selection → export of fabrication-ready panel meshes. The objectives (RBFMOpt) minimise angle error, maximise variation between G<sub>a</sub> values and minimise material usage.</li>
+    </ul>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/gm-validation-24h.jpg" alt="Grid of bending results for each configuration after 24 hours" loading="lazy"><figcaption>Experimental anchors: bending per configuration after 24 h of drying.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/gm-response-surfaces.jpg" alt="Three fitted response surfaces" loading="lazy"><figcaption>Response surfaces for the forward prediction.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/gm-segmentation.jpg" alt="Target surface segmented into panels" loading="lazy"><figcaption>Segmenting a target surface into panels.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Validation</h3>
+    <p>Target, predicted and measured angles were compared after fabrication. Measured deviations were:</p>
+    <ul>
+      <li>at 24 h: 0.1°–2.8° for P<sub>p</sub> validation (G<sub>t</sub> = 0) and 0.01°–5.6° for G<sub>a</sub> validation (G<sub>t</sub> = 2). The linear gradual mode (G<sub>t</sub> = 1) deviated by 30° or more.</li>
+      <li>at 72 h: 1.1°–3.7° (P<sub>p</sub>), 1.2°–2.2° (G<sub>a</sub>), 1.2°–5.7° (G<sub>t</sub>) and 0.6°–6.1° for complex geometry.</li>
+    </ul>
+    <p>The linear gradual mode did not fit simple arcs, but it made complex geometries with several bending angles possible.</p>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/gm-physical-validation.jpg" alt="Physical validation panels and plots of target, predicted and measured angles" loading="lazy"><figcaption>Physical validation at 24 h.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/gm-validation-72h.jpg" alt="Validation plots after 72 hours with printed samples" loading="lazy"><figcaption>Validation at 72 h.</figcaption></figure>
+  </div>
+  <div class="figs">
+    <figure><img src="assets/img/gm-flat-panels.jpg" alt="Three flat printed panels before activation" loading="lazy"><figcaption>Flat panels before activation.</figcaption></figure>
+    <figure><img src="assets/img/gm-complex-1.jpg" alt="Panels after drying forming a three-lobed shape" loading="lazy"><figcaption>Complex geometry after drying.</figcaption></figure>
+    <figure><img src="assets/img/gm-cylinder.jpg" alt="Stacked panels forming a cylinder" loading="lazy"><figcaption>Linear gradual panels forming a cylinder.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>What remains open</h3>
+    <p>The next step is two-dimensional, double-curvature surfaces, where porosity gradients work in several directions, plus a second, physics-based model (for example agent-based) for more flexibility. The workflow is being packaged as the <a href="#tool">DeformMatter</a> Grasshopper plug-in.</p>
+  </div>
+</section>
+
+<section data-view="porosity-bilayers" aria-label="Porosity-programmed bilayers">
+  <a class="back" href="#publications">← publications</a>
+  <h1 class="post-title">Porosity-Programmed Hygromorphic Bilayers</h1>
+  <p class="post-desc">From qualitative experiments to a calibrated simulation framework for self-folding 4D-printed structures</p>
+  <figure class="hero-fig"><video data-auto src="assets/media/bilayer-bending.mp4" poster="assets/media/bilayer-bending.jpg" muted loop playsinline preload="none" aria-label="Time-lapse of three printed bilayer strips bending as they dry, next to a hygrometer"></video><figcaption>Time-lapse: three printed bilayer strips bend as they dry.</figcaption></figure>
+  <dl class="facts">
+    <dt>Context</dt><dd>MPhil/PhD research, the Bartlett, UCL (2024–25), with Prof. Marjan Colletti and Dr. Kostas Grigoriadis</dd>
+    <dt>Papers</dt><dd>CAADRIA 2025 (with Hangchuan Wei) · CDRF 2025 (with Xuanyu Lu)</dd>
+    <dt>Methods</dt><dd>Wood-filament / PLA bilayer printing, humidity actuation, Timoshenko sandwich-beam theory, Grasshopper dynamic simulation, regression modelling</dd>
+  </dl>
+  <div class="prose">
+    <h3>Stage 1: what porosity does (CAADRIA 2025)</h3>
+    <p>Three experiments separated the roles of porosity in the active wood layer (P<sub>a</sub>) and the passive PLA layer (P<sub>p</sub>):</p>
+    <ul>
+      <li>active-layer porosity mainly controls <strong>response speed</strong>;</li>
+      <li>passive-layer porosity mainly controls <strong>deformation magnitude</strong>;</li>
+      <li>a balanced porosity ratio R<sub>p</sub> between the layers gives controlled, predictable transformation.</li>
+    </ul>
+    <p>Three envelope prototypes showed how humidity-driven shading could adapt with no energy input and less material.</p>
+    <h3>Stage 2: making it predictable (CDRF 2025, <em>Controllable Deformation</em>)</h3>
+    <p>Building on Timoshenko's bilayer theory, a simulation framework links physical tests, parametric modelling and dynamic simulation, so porosity distributions can be designed inversely for a target bending angle. A prototype façade panel validated the framework, with predicted and measured bending closely matched. This work led directly to the multi-objective inverse design in <a href="#gradient-matter">Gradient Matter</a>.</p>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/cdrf-title.jpg" alt="Bending results for rectangular, sinusoidal and hexagonal pore geometries" loading="lazy"><figcaption>Pore geometry and aspect ratio vs deformation (CDRF 2025).</figcaption></figure>
+    <figure><img class="contain" src="assets/img/cdrf-facade.jpg" alt="Diagram of a façade panel whose louvres bend open as humidity changes" loading="lazy"><figcaption>Design application: façade louvres that open and close with humidity (CDRF 2025).</figcaption></figure>
+    <figure><img class="contain" src="assets/img/cdrf-experiment.jpg" alt="Matrix of bending tests for different porosity combinations" loading="lazy"><figcaption>Bending tests across porosity combinations (CDRF 2025).</figcaption></figure>
+    <figure><img src="assets/img/caadria-envelope.jpg" alt="Prototype envelope modules in different humidity states" loading="lazy"><figcaption>Prototype envelope modules (CAADRIA 2025).</figcaption></figure>
+  </div>
+</section>
+
+<section data-view="cure" aria-label="C.U.R.E.">
+  <a class="back" href="#projects">← all projects</a>
+  <h1 class="post-title">C.U.R.E.</h1>
+  <p class="post-desc">Collaborative UR–KUKA resin extrusion for metal bonding</p>
+  <figure class="hero-fig"><video data-auto src="assets/media/cure-final.mp4" poster="assets/media/cure-final.jpg" muted loop playsinline preload="none" aria-label="Video of the final two-robot implementation"></video><figcaption>Final implementation (10× speed): the UR places tubes while the KUKA dispenses and cures resin.</figcaption></figure>
+  <dl class="facts">
+    <dt>Context</dt><dd>ITECH · Computational Design and Digital Fabrication 2026, University of Stuttgart</dd>
+    <dt>Team</dt><dd>Yunseo Chang, Tuğçe Naz Demir, Yuxing Liu, Julia Richard</dd>
+    <dt>Robots</dt><dd>UR10 with gripper (reach 1,300 mm, payload 10 kg, ±0.1 mm) · KUKA KR 30 HA with extruder (reach 2,033 mm, payload 30 kg, ±0.05 mm)</dd>
+    <dt>Tools</dt><dd>KRL, URScript, Grasshopper (SuperSerial, KRC Write, TCP client), Arduino, piezo and ToF sensors, UV-curable resin</dd>
+  </dl>
+  <div class="prose">
+    <h3>Research question</h3>
+    <p><em>Can multi-robot collaboration provide a repeatable, operator-free fabrication method for precise, clean, high-strength metal bonding in construction?</em></p>
+    <p>Welding and bonding by hand expose workers to toxic fumes, vary widely in quality and are checked only afterwards. An autonomous cell can work in isolation, with millimetre precision and real-time tracking. We used UV-curable resin as a stand-in for welding. It also brings joint flexibility, surface continuity, lower weight and faster assembly.</p>
+  </div>
+  <div class="prose">
+    <h3>Gripper on the UR</h3>
+    <p>A Dynamixel MX64 servo drives a rack-and-pinion mechanism for symmetric jaws. A piezo sensor listens for the vibration peak when the tube touches the structure. The UR then stops and the Grasshopper host triggers the KUKA program. Gripper states: IDLE, GRABBED, LISTEN.</p>
+    <h3>Resin extruder on the KUKA</h3>
+    <p>A NEMA17 stepper drives a resin syringe through a flexible coupling, with a UV pen and a ToF distance sensor (I²C). When the tube sits at 40 ± 2 mm, the motor turns 10° (6 steps, about 5 drops in 0.2 s), and the UV LED cures the joint for 1 minute before the loop repeats.</p>
+  </div>
+  <div class="figs two">
+    <figure><img class="contain" src="assets/img/cure-gripper-render.jpg" alt="Exploded render of the gripper end-effector" loading="lazy"><figcaption>Gripper model: piezo sensor, rack and pinion, Dynamixel servo, jaws.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/cure-extruder-render.jpg" alt="Render of the resin extruder end-effector" loading="lazy"><figcaption>Extruder model: syringe, UV pen, ToF sensor, NEMA17 motor.</figcaption></figure>
+  </div>
+  <div class="figs two">
+    <figure><img src="assets/img/gripper.jpg" alt="Printed rack-and-pinion gripper" loading="lazy"><figcaption>Gripper prototype.</figcaption></figure>
+    <figure><img src="assets/img/extruder.jpg" alt="Printed resin extruder prototype" loading="lazy"><figcaption>Extruder prototype.</figcaption></figure>
+  </div>
+  <div class="figs two">
+    <figure><video data-auto src="assets/media/cure-gripper-test.mp4" poster="assets/media/cure-gripper-test.jpg" muted loop playsinline preload="none" aria-label="Video of the gripper test"></video><figcaption>Gripper test with contact sensing.</figcaption></figure>
+    <figure><video data-auto src="assets/media/cure-extruder-test.mp4" poster="assets/media/cure-extruder-test.jpg" muted loop playsinline preload="none" aria-label="Video of the extruder test"></video><figcaption>Extruder test at the detected distance.</figcaption></figure>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/cure-gripper-electronics.jpg" alt="Wiring diagram of the gripper electronics" loading="lazy"><figcaption>Gripper electronics (Arduino UNO WiFi).</figcaption></figure>
+    <figure><img class="contain" src="assets/img/cure-extruder-electronics.jpg" alt="Wiring diagram of the extruder electronics" loading="lazy"><figcaption>Extruder electronics (Arduino UNO, CNC shield).</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Communication and path planning</h3>
+    <p>One Grasshopper instance reads both microcontrollers through SuperSerial, turns sensor values into booleans and writes two KRL variables: SRC_TRIGGER from the piezo sensor and EXTRUSION_TRIGGER from the ToF sensor. The UR runs moveL / halt / wait over a TCP client, and the KUKA runs LIN / wait in its .src program.</p>
+    <h3>Challenges and outlook</h3>
+    <ul>
+      <li>Sensor values were hard to keep consistent, and simulated plane orientations did not always match the KUKA.</li>
+      <li>Next: update joint positions live to absorb tolerances, and move communication to an MQTT or ROS broker for low-latency multi-robot sync.</li>
+    </ul>
+  </div>
+</section>
+
+<section data-view="robotic-knot" aria-label="Robotic Knots">
+  <a class="back" href="#projects">← all projects</a>
+  <h1 class="post-title">Robotic Knots</h1>
+  <p class="post-desc">Replacing the knots of a net with small robots that pull and release rope to reshape it</p>
+  <figure class="hero-fig"><video data-auto src="assets/media/net-module.mp4" poster="assets/media/net-module.jpg" muted loop playsinline preload="none" aria-label="Video of a prototype robot node module held in a green net"></video><figcaption>Motor control test with the node module in the net.</figcaption></figure>
+  <dl class="facts">
+    <dt>Context</dt><dd>ITECH first-year studio, University of Stuttgart: designing and fabricating a net with Janet Echelman</dd>
+    <dt>Group</dt><dd>Distributed robotics</dd>
+    <dt>Status</dt><dd>Concept and motor-control prototypes</dd>
+  </dl>
+  <div class="prose">
+    <p>A knotted net has a fixed shape once it is tied. In the distributed robotics group we tested an idea: replace a knot with a robot. Each robotic node can pull in or let out rope, so the net's shape can change after it is built.</p>
+  </div>
+  <div class="figs">
+    <figure><video data-auto src="assets/media/net-spool.mp4" poster="assets/media/net-spool.jpg" muted loop playsinline preload="none" aria-label="Video of a motor-driven spool winding green rope"></video><figcaption>Motor control test: the spool winds the rope in.</figcaption></figure>
+  </div>
+</section>
+
+<section data-view="plant" aria-label="The Self-Pleasuring Plant">
+  <a class="back" href="#projects">← all projects</a>
+  <h1 class="post-title">The Self-Pleasuring Plant</h1>
+  <p class="post-desc">A "useless machine": a plant that reacts to your touch by touching itself until it is satisfied</p>
+  <figure class="hero-fig"><video data-auto src="assets/media/um-loop.mp4" poster="assets/media/um-loop.jpg" muted loop playsinline preload="none" style="max-height:560px" aria-label="Video of the plant machine reacting to touch"></video><figcaption>Touch one leaf and a motor pulls a second leaf against it; the LCD reports the plant's state.</figcaption></figure>
+  <dl class="facts">
+    <dt>Context</dt><dd>ITECH · Computational Design and Digital Fabrication, useless machine assignment, University of Stuttgart, 2026</dd>
+    <dt>Team</dt><dd>Julia Richard, Nicole Agnese D'Apolito, Yuxing Liu</dd>
+    <dt>Hardware</dt><dd>Arduino UNO, leaf electrodes with amplifier modules, servo motor (later a continuous FS5109R), LCD1602 display</dd>
+    <dt>Build guide</dt><dd><a href="https://www.instructables.com/The-Self-Pleasuring-Plant" target="_blank" rel="noopener">The Self-Pleasuring Plant on Instructables</a> (7 steps)</dd>
+  </dl>
+  <div class="prose">
+    <h3>Concept</h3>
+    <p>A useless machine exists only to answer its own trigger. Here a houseplant gets excited when you touch it, searches for and touches itself, then shows its satisfaction, three times in a row before it goes to sleep.</p>
+    <h3>How it works</h3>
+    <ul>
+      <li><strong>Input, touch.</strong> Electrodes on the leaves pick up the touch signal, amplified by the amplifier of a sound-sensor module and read in the Arduino IDE. The code sets a baseline at start-up and compares new readings against it dynamically.</li>
+      <li><strong>Movement, motor.</strong> A signal above the baseline threshold starts the motor, which turns and pulls a leaf.</li>
+      <li><strong>Reaction, self-touch.</strong> When the pulled leaf touches the second electrode, the motor stops and turns back.</li>
+      <li><strong>Output, LCD.</strong> A "satisfied" message appears, the system resets and the leaf returns to its original position.</li>
+    </ul>
+    <p>The machine moves through five states: idle, trigger, self-touch, rejection (an interruption while it is busy) and sleep after three cycles.</p>
+  </div>
+  <div class="figs ptiles row2">
+    <figure><img src="assets/img/um-cover.jpg" alt="The plant on its white base with the LCD screen" loading="lazy"><figcaption>The finished machine.</figcaption></figure>
+    <figure><img src="assets/img/um-touch-close.jpg" alt="Close-up of a hand touching an electrode on a leaf" loading="lazy"><figcaption>Electrode on a leaf.</figcaption></figure>
+  </div>
+  <div class="figs ptiles row5">
+    <figure><img src="assets/img/um-state-ready.jpg" alt="The plant with its display after start-up" loading="lazy"><figcaption>Start-up and calibration.</figcaption></figure>
+    <figure><img src="assets/img/um-state-idle.jpg" alt="The plant waiting with its display on" loading="lazy"><figcaption>Idle, waiting for a touch.</figcaption></figure>
+    <figure><img src="assets/img/um-state-touch.jpg" alt="A hand touching one of the plant's leaves" loading="lazy"><figcaption>Someone touches a leaf.</figcaption></figure>
+    <figure><img src="assets/img/um-state-touch2.jpg" alt="A hand touching the plant again" loading="lazy"><figcaption>Another touch.</figcaption></figure>
+    <figure><img src="assets/img/um-state-rest.jpg" alt="The plant at rest with its display" loading="lazy"><figcaption>At rest.</figcaption></figure>
+  </div>
+  <div class="figs ptiles row2">
+    <figure><img class="contain" src="assets/img/um-wiring.jpg" alt="Wiring diagram with Arduino, electrodes, servo and LCD" loading="lazy"><figcaption>Wiring diagram.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/um-code-baseline.jpg" alt="Arduino code that sets the touch baseline at start-up" loading="lazy" style="background:#1e1f22"><figcaption>Baseline calibration code.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Challenges and next steps</h3>
+    <ul>
+      <li>The first motor was too weak. A continuous FS5109R motor pulled several leaves smoothly.</li>
+      <li>The leaves' electrical signal is weak, so the amplifiers and code needed careful calibration. Proper amplifier modules would replace the modified sound-sensor boards.</li>
+      <li>Next: a sound output so the plant can say "woo-aah".</li>
+    </ul>
+  </div>
+</section>
+
+<section data-view="material-in-formation" aria-label="Material In-Formation">
+  <a class="back" href="#projects">← all projects</a>
+  <h1 class="post-title">Material In-Formation</h1>
+  <p class="post-desc">Curvature prediction in self-shaping cross-laminated timber bilayers using agent-based modelling</p>
+  <figure class="hero-fig"><video data-auto src="assets/media/abxm-twisting.mp4" poster="assets/media/abxm-twisting.jpg" muted loop playsinline preload="none" style="max-height:460px" aria-label="Animation of a voxelised timber bilayer strip twisting as it dries"></video><figcaption>Lay-up angle 45°: the strip twists instead of bending.</figcaption></figure>
+  <dl class="facts">
+    <dt>Context</dt><dd>ITECH · Agent-Based Modelling (ABxM) seminar, University of Stuttgart, 2026</dd>
+    <dt>Team</dt><dd>Tuğçe Naz Demir, Yuxing Liu</dd>
+    <dt>Reference</dt><dd>Grönquist et al. (2019), <em>Science Advances</em> 5(9), eaax1311; Urbach Tower, HygroShell, HygroShape</dd>
+    <dt>Tools</dt><dd>Rhino / Grasshopper, ABxM.Core framework (C#)</dd>
+  </dl>
+  <div class="kpis">
+    <div class="kpi"><b>9,000</b><span>voxel agents across two configurations</span></div>
+    <div class="kpi"><b>1.7%–4.3%</b><span>curvature deviation from the published experiments</span></div>
+  </div>
+  <div class="prose">
+    <h3>Question</h3>
+    <p>How can moisture transport, grain direction, layer identity and local stress rules produce a deforming bilayer? The reference work used a top-down process (FEA in ABAQUS plus the Timoshenko equation). We built a bottom-up, emergent one in which local material behaviour produces global form, at a lighter computing cost than FEA.</p>
+    <h3>Agent system</h3>
+    <p>We compared three systems (node agents only, voxel agents only, and hierarchical) and chose the hierarchical one: each voxel centre is an agent and its 8 corner nodes are shared sub-agents. Node-only systems are too heavy, and voxel-only systems conflict because voxels share no nodes.</p>
+    <ul>
+      <li>Static data: start position, layer identity (active or passive), grain direction (R/T/L), 6 neighbours.</li>
+      <li>Dynamic data: relative humidity (RH), wood moisture content (WMC), stress, strain and node planes.</li>
+      <li>Each tick (10 hours, 90 ticks for 900 hours of drying): WMC changes → desired shrinkage per grain direction → mismatch with actual strain → stress (Hooke's law) → forces on shared nodes → nodes relax → the voxel geometry updates.</li>
+    </ul>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/abxm-activity.jpg" alt="UML activity diagram of the solver" loading="lazy"><figcaption>UML activity diagram.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/abxm-class.jpg" alt="UML class diagram of the ABxM wood solver" loading="lazy"><figcaption>UML class diagram of the embedded wood solver.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/abxm-config.jpg" alt="Render of a voxelised wood strip" loading="lazy"><figcaption>Configurations: 600 × 100 × 15 mm at 5 mm voxels (7,200 voxels) and 600 × 100 × 30 mm at 10 mm voxels (1,800 voxels).</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Calibration model (European beech)</h3>
+    <p>RH falls from 95% to 65% and WMC from 22% to 14.5%, matching the reference experiment. Three preview modes show the same run:</p>
+  </div>
+  <div class="figs tall">
+    <figure><video data-auto src="assets/media/abxm-calib-0.mp4" poster="assets/media/abxm-calib-0.jpg" muted loop playsinline preload="none" aria-label="Calibration model, preview mode 0"></video><figcaption>Mode 0: blue passive, red active layer.</figcaption></figure>
+    <figure><video data-auto src="assets/media/abxm-calib-1.mp4" poster="assets/media/abxm-calib-1.jpg" muted loop playsinline preload="none" aria-label="Calibration model, preview mode 1"></video><figcaption>Mode 1: blue wet, green dry.</figcaption></figure>
+    <figure><video data-auto src="assets/media/abxm-calib-2.mp4" poster="assets/media/abxm-calib-2.jpg" muted loop playsinline preload="none" aria-label="Calibration model, preview mode 2"></video><figcaption>Mode 2: pink compression, yellow-orange tension.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Prediction model: variables</h3>
+    <p>With the calibrated model, we changed one variable at a time:</p>
+  </div>
+  <div class="figs tall">
+    <figure><video data-auto src="assets/media/abxm-twisting.mp4" poster="assets/media/abxm-twisting.jpg" muted loop playsinline preload="none" aria-label="Lay-up angle 45 degrees"></video><figcaption>Lay-up angle: 90° bends, 45° twists.</figcaption></figure>
+    <figure><video data-auto src="assets/media/abxm-thickness.mp4" poster="assets/media/abxm-thickness.jpg" muted loop playsinline preload="none" aria-label="Number of layers"></video><figcaption>Number of layers: 2 active + 1 passive vs 4 + 2.</figcaption></figure>
+    <figure><video data-auto src="assets/media/abxm-scenario.mp4" poster="assets/media/abxm-scenario.jpg" muted loop playsinline preload="none" aria-label="Humidity scenario"></video><figcaption>Scenario: changing RH vs low, constant RH.</figcaption></figure>
+    <figure><video data-auto src="assets/media/abxm-material.mp4" poster="assets/media/abxm-material.jpg" muted loop playsinline preload="none" aria-label="Material"></video><figcaption>Material: European beech vs Norway spruce.</figcaption></figure>
+    <figure><video data-auto src="assets/media/abxm-configuration.mp4" poster="assets/media/abxm-configuration.jpg" muted loop playsinline preload="none" aria-label="Configuration"></video><figcaption>Configuration: 30 mm vs 15 mm high.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Validation</h3>
+    <p>Against the published experiments, curvature deviated by 3.1% and 1.7% for the two beech configurations and 4.3% and 2.3% for spruce. A one-at-a-time sensitivity analysis (±20% per parameter) shows which material properties drive the result.</p>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/abxm-beech.jpg" alt="Charts comparing solver and paper for European beech" loading="lazy"><figcaption>European beech: solver vs paper.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/abxm-spruce.jpg" alt="Charts comparing solver and paper for Norway spruce" loading="lazy"><figcaption>Norway spruce: solver vs paper.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/abxm-sensitivity.jpg" alt="Tornado charts of parameter sensitivity" loading="lazy"><figcaption>Sensitivity analysis.</figcaption></figure>
+  </div>
+</section>
+
+<section data-view="growing-vase" aria-label="Growing Vase">
+  <a class="back" href="#projects">← all projects</a>
+  <h1 class="post-title">Growing Vase</h1>
+  <p class="post-desc">Surrogate-assisted single- and multi-objective optimisation of a printable, functional vase</p>
+  <figure class="hero-fig"><img src="assets/img/compex-vase.jpg" alt="Optimised white 3D-printed vase holding a small bouquet" style="object-fit:contain;background:#c5c4c0;max-height:560px"><figcaption>The optimised design, with the bouquet it was sized to hold.</figcaption></figure>
+  <dl class="facts">
+    <dt>Context</dt><dd>ITECH · Computational Exploration seminar, SoSe 2026, ICD/CA (Department for Computing in Architecture)</dd>
+    <dt>Team</dt><dd>Fabian Opitz, Yunseo Chang, Yuxing Liu</dd>
+    <dt>Tutors</dt><dd>Max Zorn, Luisa Claus, Prof. Dr. Thomas Wortmann</dd>
+    <dt>Methods</dt><dd>Sobol sampling, Spearman correlation, k-means clustering, supervised surrogates (Extra Trees, XGBoost, MLP), CMA-ES / RBFOpt / TPE, RBFMOpt / NSGA-II / HypE</dd>
+  </dl>
+  <div class="kpis">
+    <div class="kpi"><b>2,000</b><span>Sobol-sampled designs</span></div>
+    <div class="kpi"><b>R² 0.996</b><span>Extra Trees surrogate for the water centre of gravity</span></div>
+    <div class="kpi"><b>−13%</b><span>optimisation runtime</span></div>
+  </div>
+  <div class="prose">
+    <h3>Research question</h3>
+    <p><em>How can we generate a printable and functional vase geometry that a given type of bouquet, with a given number of flowers, can fit into?</em></p>
+    <p>Parametric design makes personal products possible, but it is hard to be sure a design can be printed and also works, because the design space is huge and unpredictable. Each design takes three inputs: the bouquet configurations, a standard 500 ml of water, and the geometric variables.</p>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/compex-workflow.jpg" alt="Flowchart of the computational workflow" loading="lazy"><figcaption>Computational workflow: tipping analysis, collision detection and overhang analysis.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-variables.jpg" alt="Vase forms showing the effect of each design variable" loading="lazy"><figcaption>Six variables: base radius, vase height, sine-wave frequency, sine amplifier, radius amplifier and X-value manipulation.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Three conflicting objectives</h3>
+    <ul>
+      <li><strong>Printability.</strong> Surface normals are compared with the Z axis. Faces at 0°–45° or 135°–180° count as overhangs, and a height-weighted exponential penalty is strictest near the base, where watertightness matters most.</li>
+      <li><strong>Collision detection.</strong> The stem area of each bouquet, × 4 for breathing room, is subtracted from the opening area. The worst bouquet is minimised, so the smaller ones fit too.</li>
+      <li><strong>Tipping.</strong> The combined centre of gravity of water and leaning flowers is projected onto the base. Its distance to the base outline, for the worst bouquet, is passed through exp(0.1x) − 1 so that a tipping design is penalised hard.</li>
+    </ul>
+    <p>Optimising printability alone gave slender, small-based vases that could hold a single flower. That is why the two functional objectives were added.</p>
+    <h3>Learning from 2,000 designs</h3>
+    <ul>
+      <li><strong>Sampling.</strong> A Sobol sequence gave 2,000 evenly spread, reproducible designs for both the analysis and surrogate training.</li>
+      <li><strong>Correlation.</strong> Sine-wave frequency drives printability (ρ = −0.92: higher frequency, smaller penalty) and the radius amplifier drives stability (ρ = −0.68). Collision correlates only weakly with anything (base radius, ρ ≈ 0.23).</li>
+      <li><strong>Clustering.</strong> The design variables do not cluster (silhouette ≈ 0.11–0.12), but the objectives fall into four performance regimes (k = 4, silhouette ≈ 0.47).</li>
+      <li><strong>Surrogate.</strong> Linear regression, random forest, gradient boosting, XGBoost, MLP and Extra Trees were compared for the water-fill calculation. Extra Trees was best (R² 0.996 for the water CoG, RMSE ≈ 2.75 mm). X and Y were hard to predict, so the final model predicts only the water height (R² ≈ 0.99). It runs in a Grasshopper Python component and cut the runtime of a 100-sample benchmark by about 13%.</li>
+    </ul>
+  </div>
+  <div class="figs">
+    <figure><video data-auto src="assets/media/vase-sampling.mp4" poster="assets/media/vase-sampling.jpg" muted loop playsinline preload="none" class="contain" aria-label="Video of vase designs changing during Sobol sampling"></video><figcaption>Sobol sampling in Grasshopper: one design per sample (8× speed).</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-sampling.jpg" alt="Four sampled vase geometries with bouquets" loading="lazy"><figcaption>Sampled geometries with bouquet configurations.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-correlation.jpg" alt="Spearman correlation matrix between design variables and objectives" loading="lazy"><figcaption>Spearman correlation: design variables vs objectives.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-clusters.jpg" alt="Four clusters of vase designs" loading="lazy"><figcaption>k-means: four performance regimes.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-surrogates.jpg" alt="Comparison charts of surrogate models" loading="lazy"><figcaption>Comparing surrogate models for the water height.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Benchmarking the optimisers</h3>
+    <ul>
+      <li><strong>Single objective (printability, 1,000 evaluations per run).</strong> RBFOpt found the near-optimum within 50 evaluations. TPE (Bayesian) caught up after about 450 evaluations. CMA-ES varied widely between runs.</li>
+      <li><strong>Multi-objective.</strong> RBFMOpt clearly beat NSGA-II and HypE on hypervolume and covered the Pareto front more densely. The runs also exposed trade-offs: collision vs tipping (r = −0.48), and frequency vs printability (r = −0.55) and stability (r = −0.54).</li>
+      <li><strong>Archetypes from the front.</strong> Least tipping (NSGA-II): bottom-heavy, very wide base. Least collision (RBFMOpt): a wide flared opening. Optimal trade-off (RBFMOpt): moderate undulations and base, with an opening wide enough for standard bouquets.</li>
+    </ul>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/compex-soo.jpg" alt="Convergence chart for CMA-ES, RBFOpt and TPE" loading="lazy"><figcaption>Single-objective convergence.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-pareto.jpg" alt="Pareto front for RBFMOpt, NSGA-II and HypE" loading="lazy"><figcaption>Multi-objective Pareto front.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-archetypes.jpg" alt="Three vase archetypes from the Pareto front" loading="lazy"><figcaption>Least tipping, trade-off and least collision.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Against a simple cone, and the printed result</h3>
+    <p>Compared with an inverted cone, both shapes print and both fit the bouquets, but the cone tips over because its wide top pushes the centre of gravity out. The optimised vase keeps it inside the base. The final design was printed on a Bambu textured PEI plate. The top rim had a print flaw caused by the strict penalty function, which became one of the lessons.</p>
+    <h3>Takeaways</h3>
+    <ul>
+      <li>Penalty functions decide how the algorithm trades objectives; small miscalibrations show up as physical flaws.</li>
+      <li>Choosing the right complexity for a surrogate is hard: accuracy and speed pull against each other.</li>
+      <li>Variable ranges set at the start limit what any optimiser can find. Next: adaptive penalties for FDM, hybrid or deep-learning surrogates, and dynamic parameter bounds.</li>
+    </ul>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/compex-reference.jpg" alt="Comparison between the optimised vase and an inverted cone" loading="lazy"><figcaption>Optimised vase vs inverted cone.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-final.jpg" alt="Render of the final optimised vase with bouquet" loading="lazy"><figcaption>Final optimised design.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/compex-print.jpg" alt="Sliced vase on the printer bed" loading="lazy"><figcaption>Print preparation.</figcaption></figure>
+  </div>
+</section>
+
+<section data-view="halite" aria-label="Halite Hopper Crystals">
+  <a class="back" href="#projects">← all projects</a>
+  <h1 class="post-title">Halite Hopper Crystals</h1>
+  <p class="post-desc">A growth system that combines particle clustering with procedural geometry to simulate halite hopper crystals</p>
+  <figure class="hero-fig swap"><div class="swap-box"><img src="assets/img/halite-render.jpg" alt="Rendering of the generated pink hopper-crystal aggregate"><video class="swap-vid" src="assets/media/halite-growth.mp4" poster="assets/media/halite-growth.jpg" muted loop playsinline preload="none" aria-hidden="true"></video></div><figcaption>Rendering of the generated aggregate. Hover to watch it grow.</figcaption></figure>
+  <dl class="facts">
+    <dt>Context</dt><dd>ITECH · Computational Design Techniques and Design Thinking (ICD, Prof. Achim Menges), WS 2025/26</dd>
+    <dt>Team</dt><dd>Phoebe Milda Kleinau, Tuğçe Naz Demir, Yuxing Liu</dd>
+    <dt>Methods</dt><dd>Diffusion-limited aggregation (DLA), biased random walk, procedural hopper geometry, Python 3 in Grasshopper</dd>
+  </dl>
+  <div class="prose">
+    <h3>Phenomenon</h3>
+    <p>Hopper crystals form under high supersaturation. NaCl ions sit in a cubic lattice, and growth is edge-dominated: new layers start before the previous ones are complete. The result is hollow cores and stepped, terraced faces.</p>
+    <h3>DLA growth algorithm</h3>
+    <ul>
+      <li>A high-resolution cubic domain where each cell has 26 neighbours, which gives the random walker 26 degrees of freedom and sets up collision detection.</li>
+      <li>Biased Brownian motion: walkers move toward the centre 70% of the time and randomly 30%.</li>
+      <li>Walkers spawn at random around the seed and attach with a density-based "supersaturation" probability, then stick with a random rotation.</li>
+    </ul>
+    <h3>Hopper crystal formation</h3>
+    <ul>
+      <li>Stepped pyramids: 8 terraced levels on each cube face, each with a flat tread and a vertical riser.</li>
+      <li>Inverted tapering with a decay formula, and parametric hollowing with a 0.8 depth factor.</li>
+      <li>Age-based sizing: older crystals are larger, from 3× down to 1×.</li>
+    </ul>
+    <p>The component takes a domain box, seed point, grid spacing, number of crystals and stick probability, and outputs the geometry and points. The printed model measures about 6 × 7 × 8 cm.</p>
+  </div>
+  <div class="figs">
+    <figure><img class="contain" src="assets/img/halite-growth-steps.jpg" alt="Four stages of crystal growth in the domain" loading="lazy"><figcaption>Aggregation stages.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/halite-hopper.jpg" alt="Sequence from a single cube to a stepped hollow hopper crystal" loading="lazy"><figcaption>From cube to terraced hopper crystal.</figcaption></figure>
+    <figure><img class="contain" src="assets/img/halite-component.jpg" alt="Grasshopper Python component with its inputs and outputs" loading="lazy"><figcaption>The Grasshopper component.</figcaption></figure>
+  </div>
+  <div class="prose">
+    <h3>Outlook</h3>
+    <p>The DLA algorithm reproduces the clustering of halite well, and the age logic creates a natural hierarchy. Next steps are a hollow-shell logic to make the model easier to print, and linking stick probability to real-world data such as temperature.</p>
+  </div>
+</section>
+
+<!-- ============ CV ============ -->
+<section data-view="cv" aria-label="Curriculum vitae">
+  <h1 class="post-title">cv</h1>
+  <p class="post-desc">ORCID <a href="https://orcid.org/0009-0005-6191-6623" target="_blank" rel="noopener">0009-0005-6191-6623</a> · <a href="assets/CV_Yuxing_Liu.pdf" target="_blank" rel="noopener">academic CV (PDF)</a></p>
+
+  <dl class="skills">
+    <dt>Programming</dt><dd>Python (NumPy, SciPy, scikit-learn, PyTorch, pandas), C# (RhinoCommon / Grasshopper plugins), VEX</dd>
+    <dt>Robotics</dt><dd>KUKA (KRL, KUKA|prc), Universal Robots (URScript), Arduino firmware and sensors (I²C, PWM, SPI, steppers), TCP calibration</dd>
+    <dt>Fabrication</dt><dd>Multi-material FDM, custom G-code / Ovenbird / CuraEngine toolpaths, WASP clay printing, binder jetting, robotic hot-wire cutting, CNC milling, laser cutting</dd>
+    <dt>Design &amp; simulation</dt><dd>Rhino, Grasshopper, Houdini, Karamba3D, Kangaroo, Blender, Revit</dd>
+    <dt>Languages</dt><dd>Chinese (native), English (academic; degrees in the US and UK), German (A1–A2)</dd>
+  </dl>
+
+  <h2 class="sec">education</h2>
+  <div class="cv-entry"><div class="cv-date">Oct 2025 – now</div><div class="cv-main"><h3>M.Sc. Integrative Technologies and Architectural Design Research (ITECH)</h3><p class="where">University of Stuttgart, Germany</p><ul><li>Multi-material robotic fabrication, agent-based material formation, ML surrogates for fabrication.</li></ul></div></div>
+  <div class="cv-entry"><div class="cv-date">Oct 2024 – May 2025</div><div class="cv-main"><h3>MPhil / PhD in Architectural Design</h3><p class="where">The Bartlett, University College London, UK</p><ul><li>Supervisors: Prof. Marjan Colletti, Dr. Kostas Grigoriadis.</li><li>Porosity-driven hygromorphic bilayer programming; 4D-printing simulation framework.</li></ul></div></div>
+  <div class="cv-entry"><div class="cv-date">Aug 2022 – Aug 2023</div><div class="cv-main"><h3>M.S. Design: Advanced Architectural Design</h3><p class="where">University of Pennsylvania, Weitzman School of Design, USA · GPA 3.84 / 4.0</p><ul><li>Robotic fabrication, interactive design with new materials, graphic statics, ecocentric design.</li></ul></div></div>
+  <div class="cv-entry"><div class="cv-date">Sep 2016 – Jun 2022</div><div class="cv-main"><h3>Bachelor of Architecture (5-year professional degree)</h3><p class="where">Suzhou University of Science and Technology, China · GPA 3.9 / 4.0 · ranked 1st in cohort</p></div></div>
+  <div class="cv-entry"><div class="cv-date">2018 · 2019</div><div class="cv-main"><h3>Summer programmes</h3><p class="where">University of Wisconsin–Madison (2018, A) · University of Hong Kong, The SPACE (2019, A)</p></div></div>
+
+  <h2 class="sec">publications</h2>
+  <div id="cvPubs"></div>
+
+  <h2 class="sec">research and work experience</h2>
+  <div class="cv-entry"><div class="cv-date">Feb 2026 – now</div><div class="cv-main"><h3>Graduate Research Assistant, ArchiBioFoam</h3><p class="where">ICD / IntCDC Material Programming team · Horizon Europe EIC Pathfinder</p><ul><li>Material characterisation, 4D-printing toolpath calibration, climate-chamber actuation trials.</li><li>Synthetic data pipelines linking macro-porosity parameters to moisture absorption.</li></ul></div></div>
+  <div class="cv-entry"><div class="cv-date">Jan 2026 – now</div><div class="cv-main"><h3>Graduate Research Assistant, Large-Scale Construction Robotics Laboratory (LCRL)</h3><p class="where">ICD / IntCDC, University of Stuttgart</p><ul><li>C# Grasshopper plugins for multi-axis robotic timber / composite assembly.</li><li>Custom end-effectors with pneumatic and sensor feedback; toolpath verification.</li></ul></div></div>
+  <div class="cv-entry"><div class="cv-date">Nov 2025 – now</div><div class="cv-main"><h3>Graduate Research Assistant, RAW project</h3><p class="where">ICD / CA · Horizon Europe GA no. 101161441</p><ul><li>Knowledge graphs and domain ontologies for reclaimed, non-standard materials linked to generative geometry in Grasshopper.</li></ul></div></div>
+  <div class="cv-entry"><div class="cv-date">Oct 2023 – Oct 2024</div><div class="cv-main"><h3>Interior Designer</h3><p class="where">Rheia Verve, LLC · San Jose, US</p><ul><li>3D modelling, rendering and documentation.</li></ul></div></div>
+  <div class="cv-entry"><div class="cv-date">Jul 2021 – Oct 2021</div><div class="cv-main"><h3>Intern</h3><p class="where">Jiangsu Huaxin Urban Planning &amp; Municipal Engineering Design Research Institute · Lianyungang, CN</p><ul><li>Preliminary research, 3D modelling and 2D concept drafting.</li></ul></div></div>
+
+  <h2 class="sec">workshops</h2>
+  <div class="cv-entry"><div class="cv-date">2026</div><div class="cv-main"><h3>Soft-Hard Programmable Furniture</h3><p class="where">ACADIA 2026 · multi-material 3D printing, Ovenbird slicing, structural grading</p></div></div>
+  <div class="cv-entry"><div class="cv-date">2025</div><div class="cv-main"><h3>Deployable Structures with Vector-based Graphic Statics</h3><p class="where">DigitalFUTURES 2025</p></div></div>
+  <div class="cv-entry"><div class="cv-date">2025</div><div class="cv-main"><h3>Kit-of-Parts Gridshell</h3><p class="where">CAADRIA 2025 · ECNC networks, non-standard timber joints</p></div></div>
+  <div class="cv-entry"><div class="cv-date">2024</div><div class="cv-main"><h3>Digital Deformation: Design-to-Fabrication in Ceramic 3D Printing</h3><p class="where">ACADIA 2024 · WASP clay printing, toolpath modulation</p></div></div>
+  <div class="cv-entry"><div class="cv-date">2024</div><div class="cv-main"><h3>Prompt-to-Production: Automation for Circular Timber</h3><p class="where">DigitalFUTURES 2024 · robotic assembly / disassembly, AI joint generation</p></div></div>
+
+  <h2 class="sec">honours &amp; awards</h2>
+  <div class="cv-entry"><div class="cv-date">2022</div><div class="cv-main"><h3>Top Graduate Award (rank 1 in cohort)</h3><p class="where">Suzhou University of Science and Technology</p></div></div>
+  <div class="cv-entry"><div class="cv-date">2018 – 2020</div><div class="cv-main"><h3>National Scholarship for Academic Excellence (3×)</h3><p class="where">Ministry of Education, China</p></div></div>
+  <div class="cv-entry"><div class="cv-date">2019 – 2020</div><div class="cv-main"><h3>Principal investigator, provincial student innovation grant</h3><p class="where">Jiangsu Provincial Innovation and Entrepreneurship Program · <em>Livable Community for the Elderly</em></p></div></div>
+  <div class="cv-entry"><div class="cv-date">2019 · 2021</div><div class="cv-main"><h3>Second Prize (2×)</h3><p class="where">National Four-School Joint Design (<em>Remembrance</em>, 2019) · 4th Architectural Creation Competition (<em>Recreational Life 2.0</em>, 2021)</p></div></div>
+</section>
+
+<!-- ============ TEACHING ============ -->
+<!-- ============ TOOL ============ -->
+<section data-view="tool" aria-label="Tool">
+  <h1 class="post-title">tool</h1>
+  <p class="post-desc">Software that packages my research workflows so others can use them. Click an icon to read its documentation.</p>
+  <div class="tool">
+    <button class="tool-icon" type="button" id="dmOpen" aria-haspopup="dialog" aria-controls="dmDocs" title="Open DeformMatter documentation">
+      <img src="assets/tool/deformmatter-icon.png" alt="DeformMatter icon: a pine cone, closed on one side and open on the other">
+    </button>
+    <div class="tool-body">
+      <h2>DeformMatter <span class="wip">work in progress</span></h2>
+      <p>A Grasshopper plug-in for designing moisture-responsive wood–PLA bilayer panels. It covers the whole chain: panelise a target surface, predict bending from porosity, solve for each panel's porosity, and generate print paths and G-code. It brings the workflow from <a href="#gradient-matter">Gradient Matter</a> into Grasshopper.</p>
+      <p class="tool-meta">Version 0.2 · 16 components in 4 sections · Rhino 8 / Grasshopper, .NET 7 (Windows)</p>
+      <div class="links"><button class="btn" type="button" id="dmOpen2" aria-controls="dmDocs">documentation</button></div>
+    </div>
+  </div>
+  <div class="tool" style="margin-top:22px">
+    <button class="tool-icon" type="button" id="smpOpen" aria-haspopup="dialog" aria-controls="smpDocs" title="Open SMP Curvature Tool documentation">
+      <img src="assets/tool/smp-icon.jpg" alt="A curled shape-memory polymer strip" style="width:100%;height:100%;border-radius:20px;object-fit:cover">
+    </button>
+    <div class="tool-body">
+      <h2>SMP Curvature Tool <span class="wip">python</span></h2>
+      <p>A computer-vision workflow that measures how far 3D-printed shape-memory polymer (SMP) samples curl. It pairs before and after photos, reads each sample's tag, calibrates from the ruler in the picture and fits a circle to the deformed strip to report curvature in mm⁻¹.</p>
+      <p class="tool-meta">Python · NumPy, SciPy, Pillow, Matplotlib, RapidOCR · desktop batch app (Tkinter) and command line · ITECH Material Programming</p>
+      <div class="links"><button class="btn" type="button" id="smpOpen2" aria-controls="smpDocs">documentation</button></div>
+    </div>
+  </div>
+</section>
+
+<div class="docs" id="dmDocs" role="dialog" aria-modal="true" aria-labelledby="dmTitle" hidden>
+  <div class="docs-panel">
+    <button class="btn docs-close" type="button" id="dmClose">close ✕</button>
+    <div class="docs-head"><img src="assets/tool/deformmatter-icon.png" alt=""><div><h2 id="dmTitle">DeformMatter</h2><p class="post-desc" style="margin:0">Grasshopper plug-in · documentation · work in progress</p></div></div>
+
+    <h3>What it does</h3>
+    <p>A wood–PLA bilayer bends as the wood layer changes moisture. How far it bends depends on the porosity printed into it. DeformMatter works backwards from a target shape. It splits a surface into panels, finds the passive-layer porosity and gradient amplifier that give each panel its target bending angle, and prepares the multi-material print.</p>
+
+    <h3>Components</h3>
+    <div class="comp-sec"><h4>01 Design</h4><ul class="comps">
+      <li><img src="assets/tool/target-surface-panels.png" alt=""><div><b>Target Surface Panels</b><span>Splits a surface into panels and reads each panel's target bending angle.</span></div></li>
+      <li><img src="assets/tool/fabrication-clamped-porosity.png" alt=""><div><b>Fabrication-Clamped Porosity</b><span>Builds the flat porous panels, with porosity limited to what can be printed.</span></div></li>
+      <li><img src="assets/tool/bending-preview.png" alt=""><div><b>Bending Preview</b><span>Shows the panels bent to their predicted angles.</span></div></li>
+    </ul></div>
+    <div class="comp-sec"><h4>02 Predict</h4><ul class="comps">
+      <li><img src="assets/tool/material-library.png" alt=""><div><b>Material Library</b><span>Active and passive material properties, extendable with a JSON file.</span></div></li>
+      <li><img src="assets/tool/experimental-data.png" alt=""><div><b>Experimental Data</b><span>Imports bending measurements from CSV or XLSX.</span></div></li>
+      <li><img src="assets/tool/calibration-settings.png" alt=""><div><b>Calibration Settings</b><span>Layer thicknesses, widths, stiffness and swelling defaults.</span></div></li>
+      <li><img src="assets/tool/physics-calibration.png" alt=""><div><b>Physics Calibration</b><span>Fits a Timoshenko-based bilayer model to the measurements.</span></div></li>
+      <li><img src="assets/tool/synthetic-sweep.png" alt=""><div><b>Synthetic Sweep</b><span>Samples the calibrated model by grid, Latin hypercube or Sobol sequence.</span></div></li>
+      <li><img src="assets/tool/surrogate-fitting.png" alt=""><div><b>Surrogate Fitting</b><span>Fits a forward model to experimental and synthetic data together.</span></div></li>
+    </ul></div>
+    <div class="comp-sec"><h4>03 Inverse Design</h4><ul class="comps">
+      <li><img src="assets/tool/design-objectives.png" alt=""><div><b>Design Objectives</b><span>Material usage, amplifier difference between neighbouring panels, angle tolerance.</span></div></li>
+      <li><img src="assets/tool/inverse-panel-solver.png" alt=""><div><b>Inverse Panel Solver</b><span>Bounded stochastic Pareto search for each panel's porosity and gradient settings.</span></div></li>
+      <li><img src="assets/tool/solution-selection.png" alt=""><div><b>Solution Selection</b><span>Browse the feasible designs and output the chosen flat panels.</span></div></li>
+    </ul></div>
+    <div class="comp-sec"><h4>04 Fabricate</h4><ul class="comps">
+      <li><img src="assets/tool/fabrication-settings.png" alt=""><div><b>Fabrication Settings</b><span>Pore geometry, divisions, nozzle size, layer thickness and layer counts.</span></div></li>
+      <li><img src="assets/tool/print-path-generator.png" alt=""><div><b>Print Path Generator</b><span>Multi-material print paths: zigzag, parallel, grid, concentric or contours.</span></div></li>
+      <li><img src="assets/tool/path-visualizer.png" alt=""><div><b>Path Visualizer</b><span>Steps through the print layer by layer with a moving nozzle.</span></div></li>
+      <li><img src="assets/tool/gcode-generator.png" alt=""><div><b>GCode Generator</b><span>Marlin-style G-code with tool changes, returned as text.</span></div></li>
+    </ul></div>
+
+    <h3>Basic workflow</h3>
+    <ol class="flow">
+      <li>Connect a surface to <b>Target Surface Panels</b>.</li>
+      <li>Send the panels and target angles to the <b>Inverse Panel Solver</b>, together with <b>Fabrication Settings</b> and <b>Design Objectives</b>. Pick the drying state (24 h or 72 h), the allowed gradient modes, the search ranges and the iterations, then set Run to True.</li>
+      <li>Choose a design in <b>Solution Selection</b> and check it in <b>Bending Preview</b>.</li>
+      <li>Generate paths with the <b>Print Path Generator</b>, inspect them in the <b>Path Visualizer</b>, and export with the <b>GCode Generator</b>.</li>
+    </ol>
+
+    <h3>Built-in forward model</h3>
+    <p>By default the solver uses equations fitted to my physical experiments, one for each drying state (24 h, 72 h) and gradient mode. They predict the bending angle from passive porosity and gradient amplifier for the tested reference panel. Use the Predict components to build new models from new measurements.</p>
+
+    <h3>Current limits</h3>
+    <ul class="flow">
+      <li>The built-in equations describe the tested reference panels. Changing panel length changes the geometry only.</li>
+      <li>Panels must be rectangular and developable.</li>
+      <li>Geometry, viewport behaviour, slicing and G-code motion have not been verified inside Rhino yet. Check every print before running it.</li>
+    </ul>
+  </div>
+</div>
+<div class="docs" id="smpDocs" role="dialog" aria-modal="true" aria-labelledby="smpTitle" hidden>
+  <div class="docs-panel">
+    <button class="btn docs-close" type="button" id="smpClose">close ✕</button>
+    <div class="docs-head"><img src="assets/tool/smp-icon.jpg" alt="" style="border-radius:12px;object-fit:cover"><div><h2 id="smpTitle">SMP Curvature Tool</h2><p class="post-desc" style="margin:0">Computer-vision analysis of paired before/after SMP samples · documentation</p></div></div>
+    <div class="figs two">
+      <figure><video data-auto src="assets/media/smp-recovery-1.mp4" poster="assets/media/smp-recovery-1.jpg" muted loop playsinline preload="none" aria-label="Video of a printed SMP sample changing shape in a water bath"></video><figcaption>A printed sample changing shape in a water bath.</figcaption></figure>
+      <figure><video data-auto src="assets/media/smp-recovery-2.mp4" poster="assets/media/smp-recovery-2.jpg" muted loop playsinline preload="none" aria-label="Second video of an SMP sample changing shape in water"></video><figcaption>A second sample in the water bath.</figcaption></figure>
+    </div>
+    <figure class="hero-fig"><img src="assets/img/smp-overlay-pair.jpg" alt="Tool output: the flat strip and the curled strip outlined, with the ruler and the G1_S3 tag visible in both photos" loading="lazy" style="object-fit:contain;max-height:none;background:#fff"><figcaption>Tool output for sample G1_S3: the detected strip before (left) and after deformation (right), with the ruler and the sample tag in both photos.</figcaption></figure>
+
+    <h3>What it does</h3>
+    <p>Shape-memory polymer strips are printed flat, programmed and then recover a curved shape. Measuring the curvature of dozens of samples by hand is slow and inconsistent. This tool reads the photos, finds each strip and reports its radius and curvature in millimetres, with an overlay so every result can be checked.</p>
+
+
+
+    <h3>How it measures</h3>
+    <ol class="flow">
+      <li><b>Pairing.</b> Photos are matched by sample tag, for example T4B8_1, and grouped by the part before the underscore (T4B8).</li>
+      <li><b>Tag reading.</b> The batch app reads the paper tag in each photo with OCR and proposes a new file name for you to confirm.</li>
+      <li><b>Calibration.</b> Metric ticks on the ruler in each image set the millimetre scale, read from horizontal or vertical ruler bands. If a ruler is unreadable, the image is flagged and the batch median scale is used. Manual and known-length calibration are available as explicit overrides.</li>
+      <li><b>Segmentation.</b> The strip is separated from the background, the ruler and the tag.</li>
+      <li><b>Curvature.</b> A least-squares circle is fitted to the deformed boundary. The radius R is reported in mm and the curvature is κ = 1 / R in mm⁻¹.</li>
+      <li><b>Results.</b> Boundary overlays, a CSV and JSON of all samples, group averages and plots, and an export into the 4D-printing curvature Excel template.</li>
+    </ol>
+
+    <h3>Worked example: sample G1_S3</h3>
+    <div class="fitex">
+      <figure><img src="assets/img/smp-fit.jpg" alt="Close-up of the curled strip with the detected region shaded, its bounding box and the fitted circle with its centre" loading="lazy"><figcaption>Shaded: detected strip. Cyan: bounding box. Green: least-squares circle and its centre.</figcaption></figure>
+      <div>
+        <ol class="flow">
+          <li>The ruler ticks give the scale: <b>0.0329 mm per pixel</b>.</li>
+          <li>The flat strip measures <b>58.80 mm</b> long before deformation.</li>
+          <li>Boundary points of the curled strip are fitted with a circle by least squares: radius <b>R = 10.82 mm</b>, fit error (RMSE) 0.19 mm.</li>
+          <li>Curvature is the inverse of the radius: <b>κ = 1 / R = 0.0924 mm⁻¹</b>.</li>
+        </ol>
+        <table class="mini">
+          <caption>Group G1, 11 samples (this run)</caption>
+          <thead><tr><th>sample</th><th>R (mm)</th><th>κ (mm⁻¹)</th></tr></thead>
+          <tbody><tr><td>S1</td><td>14.39</td><td>0.0695</td></tr><tr><td>S2</td><td>10.65</td><td>0.0939</td></tr><tr><td>S3</td><td>10.82</td><td>0.0924</td></tr><tr><td>S4</td><td>6.47</td><td>0.1545</td></tr><tr><td>S5</td><td>11.22</td><td>0.0891</td></tr><tr><td>S6</td><td>10.04</td><td>0.0996</td></tr><tr><td>S7</td><td>8.34</td><td>0.1199</td></tr><tr><td>S8</td><td>5.12</td><td>0.1952</td></tr><tr><td>S9</td><td>9.05</td><td>0.1105</td></tr><tr><td>S10</td><td>8.20</td><td>0.1220</td></tr><tr><td>S12</td><td>5.50</td><td>0.1819</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <h3>Batch app workflow</h3>
+    <ol class="flow">
+      <li>Double-click <code>run_app.bat</code> and select the after-deformation photos from the camera's SD card.</li>
+      <li>Choose an empty output folder, check the OCR rename preview and enter the sample dimensions for the batch.</li>
+      <li>Click <b>1 Rename</b>, then <b>2 Calculate</b> to see the results table, then <b>3 Evaluate</b> for group averages and plots.</li>
+      <li>Export the selected plots, or all of them, as PNG files.</li>
+    </ol>
+    <p>The source photos are never copied. The output folder holds only the renamed working images, <code>results/</code> (overlays, CSV, JSON) and <code>analysis/</code> (exported plots).</p>
+
+    <h3>Command line</h3>
+    <ul class="flow">
+      <li><code>python smp_curvature_tool.py --measure-only --overwrite</code> measures every sample group; add <code>--groups</code> to pick groups.</li>
+      <li><code>python smp_curvature_tool.py --export-template-only</code> fills the Excel template from the measurements.</li>
+      <li><code>python smp_curvature_tool.py --reset-test</code> clears generated results before another test.</li>
+    </ul>
+    <p>Always check the boundary overlays before trusting the numbers: if an overlay follows a bright patch instead of the strip, review that image.</p>
+  </div>
+</div>
+
+<section data-view="teaching" aria-label="Teaching">
+  <h1 class="post-title">teaching</h1>
+  <p class="post-desc">Workshops and guest lectures on 4D printing and procedural design.</p>
+  <div class="cv-entry"><div class="cv-date"><span class="badge">Jun 2026</span></div><div class="cv-main"><h3>ReForm: Exploring 4D Printing in Architecture</h3><p class="where">DigitalFUTURES 2026 (in-person workshop) · Teaching assistant</p><ul><li>Assisted teaching on 4D-printing kinematics, toolpath generation with Ovenbird and Cura, preparing moisture-responsive bilayers, and parametric simulation.</li><li>Supported international graduate students through to their final reviews.</li></ul></div></div>
+  <div class="cv-entry"><div class="cv-date"><span class="badge">Jan 2024</span></div><div class="cv-main"><h3>Houdini Workflow of Half-Symmetry Generation for Bio-Inspired Envelopes</h3><p class="where">The Bartlett, UCL · Guest lecturer (chair: Richard Beckett)</p><ul><li>Taught master's students VEX procedural modelling, symmetry algorithms and export workflows for robotic 3D fabrication.</li></ul></div></div>
+</section>
+
+<!-- contact (all views) -->
+<nav class="social" aria-label="Profiles">
+  <a href="https://www.linkedin.com/in/yuxing-liu-5334a1260/" target="_blank" rel="noopener">LinkedIn</a>
+  <a href="https://estellalyx.myportfolio.com/" target="_blank" rel="noopener">Design portfolio</a>
+</nav>
+<div class="email-row"><span>Email</span> <code id="email">yuxinglupennedu@gmail.com</code> <button class="btn" type="button" id="copyEmail">copy</button></div>
+</main>
+
+<footer><div class="wrap">© 2026 Yuxing (Estella) Liu · Stuttgart · Layout inspired by al-folio.</div></footer>
+
+<script>
+(function () {
+  /* ---------- data ---------- */
+  var ME = "Yuxing Liu";
+  var pubs = [
+    { id: "liu2026gradient", year: 2026, abbr: "ACADIA", cls: "acadia", selected: true, img: "assets/img/gm-bracelet.jpg", vid: "assets/media/pub-gm.mp4", project: "gradient-matter",
+      title: "Gradient Matter: Multi-Objective Inverse Design for 4D-Printed Hygromorphs through Gradient Porosity Programming",
+      authors: ["Yuxing Liu"], venue: "Proceedings of the 46th ACADIA Conference (ACADIA 2026)", status: "accepted, full paper",
+      abs: "Hygromorphic 4D printing enables printed materials to change shape over time in response to moisture, opening possibilities for climate-responsive, resource-efficient building solutions. This research presents an integrated computational framework for the inverse design and multi-objective optimization of 4D-printed wood–PLA hygroscopic bilayers through gradient porosity programming. Unlike forward workflows, it lets users define target curved surfaces and automatically generates fabrication-ready meshes. The method is structured as a cyber-physical loop connecting fabrication-aware geometry generation, empirical material characterization, synthetic data generation, predictive modelling and an integrated inverse solver. It encodes uniform- and variable-curvature morphologies through calibrated gradient porosity fields; experiments show multiple target deformations can be achieved with acceptable error, and that different gradient logics correspond to distinct curvature conditions." },
+    { id: "iass2026segmentation", cvOnly: true, year: 2026, abbr: "IASS", cls: "iass", img: null,
+      title: "Volumetric Segmentation Strategies for Fused Shell Geometries",
+      authors: ["Second author (full author list to follow)"], venue: "Proceedings of the IASS Annual Symposium 2026", status: "accepted, full paper",
+      abs: "Non-standard architectural shell geometry, computational discretization into volumetric segments, and validation through scaled physical models." },
+    { id: "acadia2025timber", cvOnly: true, year: 2025, abbr: "ACADIA", cls: "acadia", img: null,
+      title: "Construction-Aware Timber: An Agent-Based Modeling Approach for Non-Standard Intersecting Timber Strip Structures",
+      authors: ["Second author (full author list to follow)"], venue: "Proceedings of the 45th ACADIA Conference (ACADIA 2025)", status: "full paper",
+      abs: "Agent-based dynamic simulation that embeds robotic assembly constraints into the form-finding of intersecting timber strip structures, validated through 1:1 physical fabrication." },
+    { id: "liu2025cdrf", year: 2025, abbr: "CDRF", cls: "cdrf", selected: true, img: "assets/img/cdrf-title.jpg", vid: "assets/media/pub-cdrf.mp4", project: "porosity-bilayers",
+      title: "Controllable Deformation: A 4D-Printing Simulation Framework for Porosity-Driven Hygromorphic Bilayer Structure",
+      authors: ["Yuxing Liu", "Xuanyu Lu", "Marjan Colletti", "Kostas Grigoriadis"], venue: "Computational Design and Robotic Fabrication (CDRF 2025)", status: "full paper",
+      abs: "This research proposes a 4D-printing simulation framework that uses porosity as a design parameter to program deformation in hygromorphic bilayer structures. Grounded in Timoshenko's sandwich beam theory, the framework integrates physical experimentation, parametric modeling and dynamic simulation in Grasshopper, enabling inverse design of porosity distributions for target bending. Bilayers of wood-based (active) and PLA (passive) filaments show consistent humidity-driven shape change. The study proceeds through physical experiments, dynamic simulation to collect curvature data, and mathematical modeling to refine design guidelines; a prototype façade panel validates the framework, with predicted bending closely matching experiments." },
+    { id: "liu2025caadria", year: 2025, abbr: "CAADRIA", cls: "caadria", selected: true, img: "assets/img/caadria-envelope.jpg", vid: "assets/media/bilayer-bending.mp4", project: "porosity-bilayers",
+      title: "Programming Bilayer Structures in 4D-Printed Hygromorphs by Tailoring Porosity in Macroscale",
+      authors: ["Yuxing Liu", "Hangchuan Wei", "Marjan Colletti", "Kostas Grigoriadis"], venue: "Proceedings of the 30th CAADRIA Conference (CAADRIA 2025)", status: "published",
+      abs: "The study investigates the impact of macroscale porosity on deformation in 4D-printed hygromorphic bilayers for building envelopes. Combining a moisture-responsive active layer (wood filament) with a passive PLA layer, three experiments show that (1) active-layer porosity relates to response speed, (2) passive-layer porosity strongly affects deformation magnitude, and (3) a balanced porosity ratio between layers enables controlled, predictable transformation. Three prototypes demonstrate adaptive envelopes that adjust to humidity for energy-efficient shading, contributing a framework for programmable material design with minimal material use." },
+    { id: "liu2020needs", cvOnly: true, year: 2020, abbr: "City House", cls: "other", img: null,
+      title: "The Needs and Strategies for the Adaptation of the Outdoor Environment of Old Relocation Communities",
+      authors: ["Yuxing Liu"], venue: "City House 27: 125–128 (ISSN 1006-6659)", status: "journal article",
+      abs: "Ageing-oriented adaptation of outdoor environments in older resettlement communities in China; outcome of the provincial student research grant “Livable Community for the Elderly”." }
+  ];
+  var projects = [
+    { id: "cure", tags: ["robotics"], img: "assets/img/cure-1.jpg", vid: "assets/media/cure-final.mp4", meta: "ITECH 2026 · KUKA + UR", title: "C.U.R.E.", desc: "Two-robot cell with custom gripper and UV-resin extruder for operator-free bonding of metal tubes." },
+    { id: "robotic-knot", tags: ["robotics"], img: "assets/media/net-spool.jpg", vid: "assets/media/net-module.mp4", meta: "ITECH studio · distributed robotics", title: "Robotic Knots", desc: "Robots replace the knots of a net and pull or release rope to change its shape. Developed in the studio with Janet Echelman." },
+    { id: "plant", tags: ["robotics"], img: "assets/img/um-cover.jpg", vid: "assets/media/um-loop.mp4", vidFit: "#ffffff", meta: "ITECH 2026 · CDDF", title: "The Self-Pleasuring Plant", desc: "A useless machine: touch the plant and it reaches for itself with a motor, then tells you it is satisfied." },
+    { id: "material-in-formation", tags: ["material", "sim"], img: "assets/media/abxm-twisting-top.jpg", vid: "assets/media/abxm-twisting-top.mp4", fit: "#ffffff", meta: "ITECH 2026 · ABxM", title: "Material In-Formation", desc: "Agent-based model that predicts curvature in self-shaping cross-laminated timber from local moisture and grain." },
+    { id: "growing-vase", tags: ["ml"], img: "assets/img/compex-vase.jpg", fit: "#c5c4c0", vid: "assets/media/vase-sampling.mp4", vidFit: "#ffffff", meta: "ITECH 2026 · CompEx", title: "Growing Vase", desc: "A printable vase that fits its bouquet and does not tip, found with surrogate-assisted multi-objective optimisation." },
+    { id: "halite", tags: ["sim"], img: "assets/img/halite-render.jpg", vid: "assets/media/halite-growth.mp4", vidFit: "#ffffff", meta: "ITECH 2025/26 · CDDT", title: "Halite Hopper Crystals", desc: "A DLA-based growth system that simulates how hopper crystals self-organise." }
+  ];
+
+  /* ---------- helpers ---------- */
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function authorsHtml(list) {
+    return list.map(function (a) { return a === ME ? '<em class="me">' + esc(a) + "</em>" : esc(a); }).join(", ");
+  }
+  function bibtex(p) {
+    var a = p.authors[0].indexOf("Co-authored") === 0 ? "Liu, Yuxing and others" : p.authors.map(function (n) { var s = n.split(" "); return s.pop() + ", " + s.join(" "); }).join(" and ");
+    var type = p.cls === "other" ? "article" : "inproceedings";
+    var venueKey = type === "article" ? "journal" : "booktitle";
+    return "@" + type + "{" + p.id + ",\n  title     = {" + p.title + "},\n  author    = {" + a + "},\n  " + (venueKey + "   ").slice(0, 9) + " = {" + p.venue + "},\n  year      = {" + p.year + "}\n}";
+  }
+  function pubLi(p, prefix) {
+    var uid = prefix + p.id;
+    var side = '<div class="pub-side"><span class="abbr ' + p.cls + '">' + esc(p.abbr) + "</span>" +
+      (p.img ? '<div class="swap-box pub-box"><img class="pub-thumb" src="' + p.img + '" alt="" loading="lazy">' + (p.vid ? '<video class="swap-vid" src="' + p.vid + '" muted loop playsinline preload="none" aria-hidden="true"></video>' : "") + "</div>" : "") + "</div>";
+    var links = '<div class="links">' +
+      '<button class="btn" type="button" aria-expanded="false" aria-controls="' + uid + '-abs">abs</button>' +
+      '<button class="btn" type="button" aria-expanded="false" aria-controls="' + uid + '-bib">bib</button>' +
+      (p.project ? '<a class="btn" href="#' + p.project + '">details</a>' : "") + "</div>";
+    return "<li>" + side + '<div class="pub-body"><p class="pub-title">' + esc(p.title) + "</p>" +
+      '<p class="pub-authors">' + authorsHtml(p.authors) + "</p>" +
+      '<p class="pub-venue">' + esc(p.venue) + ' <span class="pub-status">· ' + esc(p.status) + "</span></p>" + links +
+      '<div class="pub-panel" id="' + uid + '-abs" hidden><p>' + esc(p.abs) + "</p></div>" +
+      '<div class="pub-panel" id="' + uid + '-bib" hidden><pre>' + esc(bibtex(p)) + "</pre></div></div></li>";
+  }
+
+  /* ---------- render ---------- */
+  var years = [];
+  var listed = pubs.filter(function (p) { return !p.cvOnly; });
+  listed.forEach(function (p) { if (years.indexOf(p.year) < 0) years.push(p.year); });
+  document.getElementById("allPubs").innerHTML = years.map(function (y) {
+    return '<h2 class="year">' + y + '</h2><ol class="bib">' + listed.filter(function (p) { return p.year === y; }).map(function (p) { return pubLi(p, "a-"); }).join("") + "</ol>";
+  }).join("");
+  document.getElementById("cvPubs").innerHTML = pubs.map(function (p) {
+    return '<div class="cv-entry"><div class="cv-date">' + p.year + '</div><div class="cv-main"><h3>' + esc(p.title) + '</h3><p class="where">' + authorsHtml(p.authors) + ' · <em>' + esc(p.venue) + '</em> · ' + esc(p.status) + '</p></div></div>';
+  }).join("");
+  document.getElementById("projectGrid").innerHTML = projects.map(function (p) {
+    var fit = p.fit ? ' class="fit" style="background:' + p.fit + '"' : "";
+    return '<a class="card" href="#' + p.id + '" data-tags="' + p.tags.join(" ") + '"' + (p.pop ? ' data-pop="' + p.pop + '"' + (p.popCap ? ' data-pop-cap="' + esc(p.popCap) + '"' : "") : "") + '><div class="ph"><img src="' + p.img + '" alt="" loading="lazy"' + fit + '>' +
+      (p.vid ? '<video class="card-vid' + (p.fit || p.vidFit ? ' fit' : '') + '" src="' + p.vid + '" muted loop playsinline preload="none" aria-hidden="true"' + (p.fit || p.vidFit ? ' style="background:' + (p.vidFit || p.fit) + '"' : '') + '></video>' : "") + "</div>" +
+      '<div class="card-body"><span class="meta">' + esc(p.meta) + "</span><h3>" + esc(p.title) + "</h3><p>" + esc(p.desc) + "</p></div></a>";
+  }).join("");
+
+  /* abs / bib toggles */
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("button[aria-controls]");
+    if (!b) return;
+    var panel = document.getElementById(b.getAttribute("aria-controls"));
+    var open = b.getAttribute("aria-expanded") === "true";
+    b.parentNode.querySelectorAll("button[aria-controls]").forEach(function (o) {
+      o.setAttribute("aria-expanded", "false"); document.getElementById(o.getAttribute("aria-controls")).hidden = true;
+    });
+    if (!open) { b.setAttribute("aria-expanded", "true"); panel.hidden = false; }
+  });
+
+  /* project filters */
+  var chips = document.querySelectorAll(".chip");
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      var f = c.getAttribute("data-filter");
+      chips.forEach(function (o) { o.setAttribute("aria-pressed", String(o === c)); });
+      document.querySelectorAll("#projectGrid .card").forEach(function (card) {
+        card.hidden = f !== "all" && card.getAttribute("data-tags").split(" ").indexOf(f) < 0;
+      });
+    });
+  });
+
+  /* ---------- views (hash routing) ---------- */
+  var views = {};
+  document.querySelectorAll("[data-view]").forEach(function (v) { views[v.getAttribute("data-view")] = v; });
+  var navFor = { "gradient-matter": "publications", "porosity-bilayers": "publications", cure: "projects", "robotic-knot": "projects", plant: "projects", "material-in-formation": "projects", "growing-vase": "projects", halite: "projects" };
+  function show(fromHash) {
+    var h = (location.hash || "").slice(1);
+    var target = views[h] ? h : null;
+    var anchor = null;
+    if (!target) { anchor = h && document.getElementById(h); target = anchor ? anchor.closest("[data-view]").getAttribute("data-view") : "about"; }
+    Object.keys(views).forEach(function (k) { views[k].classList.toggle("on", k === target); });
+    var navKey = navFor[target] || target;
+    document.querySelectorAll(".nav ul a").forEach(function (a) {
+      if (a.getAttribute("href") === "#" + navKey) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
+    });
+    var name = views[target].getAttribute("aria-label");
+    document.title = target === "about" ? "Yuxing (Estella) Liu" : name + " · Yuxing Liu";
+    if (anchor) anchor.scrollIntoView(); else if (fromHash) window.scrollTo(0, 0);
+  }
+  window.addEventListener("hashchange", function () { show(true); });
+  show(false);
+
+  /* ---------- card tilt ---------- */
+  (function () {
+    if (!matchMedia("(hover: hover) and (pointer: fine)").matches || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    // project cards lean toward the pointer; the image drifts the opposite way
+    document.getElementById("projectGrid").addEventListener("pointermove", function (e) {
+      var card = e.target.closest(".card"); if (!card) return;
+      var r = card.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+      card.classList.add("tilting");
+      card.style.transform = "perspective(800px) rotateX(" + (-y * 6).toFixed(2) + "deg) rotateY(" + (x * 8).toFixed(2) + "deg) translateY(-2px)";
+      var img = card.querySelector("img"); if (img) img.style.transform = "scale(1.08) translate(" + (-x * 10).toFixed(1) + "px," + (-y * 8).toFixed(1) + "px)";
+    });
+    document.getElementById("projectGrid").addEventListener("pointerout", function (e) {
+      var card = e.target.closest(".card"); if (!card || card.contains(e.relatedTarget)) return;
+      card.classList.remove("tilting"); card.style.transform = "";
+      var img = card.querySelector("img"); if (img) img.style.transform = "";
+    });
+  })();
+
+  var finePointer = matchMedia("(hover: hover) and (pointer: fine)").matches && !matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- reading progress ---------- */
+  (function () {
+    var bar = document.getElementById("progress");
+    function upd() { var max = document.documentElement.scrollHeight - innerHeight; bar.style.transform = "scaleX(" + (max > 0 ? Math.min(1, scrollY / max) : 0) + ")"; }
+    addEventListener("scroll", upd, { passive: true }); addEventListener("resize", upd); addEventListener("hashchange", function () { setTimeout(upd, 0); }); upd();
+  })();
+
+  /* ---------- lightbox for figures ---------- */
+  (function () {
+    var SEL = ".hero-fig img, .figs img, .pub-thumb, .hero-fig video, .figs video";
+    var vid = document.getElementById("lbVid");
+    var box = document.getElementById("lightbox"), img = document.getElementById("lbImg"), cap = document.getElementById("lbCap"), count = document.getElementById("lbCount");
+    var group = [], idx = 0, lastFocus = null;
+    document.querySelectorAll(SEL).forEach(function (el) { el.classList.add("zoomable"); });
+    function captionOf(el) {
+      var f = el.closest("figure"); if (f && f.querySelector("figcaption")) return f.querySelector("figcaption").textContent;
+      var li = el.closest("li"); if (li && li.querySelector(".pub-title")) return li.querySelector(".pub-title").textContent;
+      return el.alt || "";
+    }
+    function render() {
+      var el = group[idx], isVid = el.tagName === "VIDEO";
+      img.hidden = isVid; vid.hidden = !isVid;
+      if (isVid) { img.removeAttribute("src"); vid.src = el.getAttribute("src"); vid.poster = el.poster || ""; var pr = vid.play(); if (pr) pr.catch(function () {}); }
+      else { vid.pause(); vid.removeAttribute("src"); img.src = el.currentSrc || el.src; img.alt = el.alt || ""; }
+      cap.textContent = captionOf(el); count.textContent = (idx + 1) + " / " + group.length;
+      img.style.animation = "none"; void img.offsetWidth; img.style.animation = "";
+      document.getElementById("lbPrev").hidden = document.getElementById("lbNext").hidden = group.length < 2;
+    }
+    function open(el) {
+      var view = el.closest("[data-view]");
+      group = Array.prototype.slice.call(view.querySelectorAll(SEL)).filter(function (g) { return g.offsetParent !== null; });
+      if (group.indexOf(el) < 0) group = [el];
+      idx = group.indexOf(el); lastFocus = document.activeElement;
+      box.hidden = false; render(); document.getElementById("lbClose").focus();
+    }
+    function close() { box.hidden = true; img.removeAttribute("src"); vid.pause(); vid.removeAttribute("src"); if (lastFocus) lastFocus.focus(); }
+    function step(d) { idx = (idx + d + group.length) % group.length; render(); }
+    document.addEventListener("click", function (e) {
+      var el = e.target.closest && e.target.closest(SEL);
+      if (el && !el.closest(".card")) { e.preventDefault(); open(el); }
+    });
+    document.getElementById("lbClose").addEventListener("click", close);
+    document.getElementById("lbPrev").addEventListener("click", function () { step(-1); });
+    document.getElementById("lbNext").addEventListener("click", function () { step(1); });
+    box.addEventListener("click", function (e) { if (e.target === box) close(); });
+    document.addEventListener("keydown", function (e) {
+      if (box.hidden) return;
+      if (e.key === "Escape") close(); else if (e.key === "ArrowRight") step(1); else if (e.key === "ArrowLeft") step(-1);
+    });
+  })();
+
+  if (finePointer) {
+    /* ---------- publication preview follows the cursor ---------- */
+    (function () {
+      var fl = document.createElement("div"), fi = document.createElement("img");
+      fl.className = "pub-float"; fl.setAttribute("aria-hidden", "true"); fi.alt = ""; fl.appendChild(fi); document.body.appendChild(fl);
+      var tx = 0, ty = 0, x = 0, y = 0, raf = 0, curLi = null;
+      function loop() {
+        x += (tx - x) * 0.2; y += (ty - y) * 0.2;
+        fl.style.transform = "translate3d(" + x + "px," + y + "px,0) scale(" + (fl.classList.contains("on") ? 1 : .9) + ")";
+        raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.4 ? requestAnimationFrame(loop) : 0;
+      }
+      document.addEventListener("pointermove", function (e) {
+        var li = e.target.closest && e.target.closest(".bib > li");
+        if (li !== curLi) {
+          if (curLi) curLi.classList.remove("hov");
+          curLi = li;
+          var th = li && li.querySelector(".pub-thumb");
+          if (li) li.classList.add("hov");
+          if (th) { if (!fl.classList.contains("on")) { x = e.clientX + 24; y = e.clientY + 18; } fi.src = th.src; fl.classList.add("on"); } else fl.classList.remove("on");
+        }
+        if (!fl.classList.contains("on")) return;
+        tx = Math.min(e.clientX + 24, innerWidth - 276); ty = Math.min(e.clientY + 18, innerHeight - 214);
+        if (e.target.closest(".pub-thumb, .pub-panel")) fl.classList.remove("on");
+        if (!raf) raf = requestAnimationFrame(loop);
+      });
+    })();
+
+    /* ---------- page-title letters lift toward the cursor ---------- */
+    (function () {
+      var letters = [];
+      document.querySelectorAll(".post-title").forEach(function (h) {
+        (function split(node) {
+          Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+            if (n.nodeType === 3) {
+              var frag = document.createDocumentFragment();
+              n.textContent.split("").forEach(function (c) { var s = document.createElement("span"); s.className = "ch"; s.textContent = c; frag.appendChild(s); letters.push(s); });
+              node.replaceChild(frag, n);
+            } else if (n.nodeType === 1) split(n);
+          });
+        })(h);
+        h.setAttribute("aria-label", h.textContent);
+      });
+      var raf = 0, px = -1e4, py = -1e4;
+      function apply() {
+        raf = 0;
+        letters.forEach(function (s) {
+          if (!s.offsetParent) return;
+          var r = s.getBoundingClientRect(), dx = px - (r.left + r.width / 2), dy = py - (r.top + r.height / 2);
+          var k = Math.max(0, 1 - Math.sqrt(dx * dx + dy * dy) / 110);
+          s.style.transform = k ? "translateY(" + (-9 * k).toFixed(1) + "px) rotate(" + (dx > 0 ? -1 : 1) * (6 * k).toFixed(1) + "deg)" : "";
+          s.style.color = k > .45 ? "var(--accent)" : "";
+        });
+      }
+      document.addEventListener("pointermove", function (e) { px = e.clientX; py = e.clientY; if (!raf) raf = requestAnimationFrame(apply); });
+      document.documentElement.addEventListener("mouseleave", function () { px = py = -1e4; apply(); });
+    })();
+
+    /* ---------- portrait leans toward the cursor ---------- */
+    (function () {
+      var p = document.querySelector(".portrait"); if (!p) return;
+      p.addEventListener("pointermove", function (e) {
+        var r = p.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - 0.5, y = (e.clientY - r.top) / r.height - 0.5;
+        p.classList.add("tilt");
+        p.style.transform = "perspective(700px) rotateX(" + (-y * 8).toFixed(2) + "deg) rotateY(" + (x * 10).toFixed(2) + "deg) scale(1.02)";
+      });
+      p.addEventListener("pointerleave", function () { p.classList.remove("tilt"); p.style.transform = ""; });
+    })();
+  }
+
+  var reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- videos play only while on screen ---------- */
+  (function () {
+    var vids = document.querySelectorAll("video[data-auto]");
+    if (reduceMotion || !window.IntersectionObserver) { vids.forEach(function (v) { v.controls = true; }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        var v = en.target;
+        if (en.isIntersecting) { var p = v.play(); if (p) p.catch(function () {}); } else v.pause();
+      });
+    }, { threshold: 0.25 });
+    vids.forEach(function (v) { io.observe(v); });
+    document.querySelectorAll(".card").forEach(function (c) {
+      var v = c.querySelector(".card-vid"); if (!v) return;
+      c.addEventListener("mouseenter", function () { var p = v.play(); if (p) p.catch(function () {}); });
+      c.addEventListener("mouseleave", function () { v.pause(); });
+    });
+  })();
+
+  /* ---------- image credits: one line per project, publication and tool ---------- */
+  (function () {
+    var byView = {
+      "gradient-matter": "Gradient Matter, ACADIA 2026 (Liu, Huang, Menges), ICD, University of Stuttgart; photos by Yuxing Liu.",
+      "porosity-bilayers": "CDRF 2025 (Liu, Lu, Colletti, Grigoriadis) and CAADRIA 2025 (Liu, Wei, Colletti, Grigoriadis), the Bartlett, UCL; bending time-lapse by Yuxing Liu.",
+      cure: "C.U.R.E. team (Yunseo Chang, Tuğçe Naz Demir, Yuxing Liu, Julia Richard), ITECH CDDF 2026.",
+      "robotic-knot": "ITECH studio 2025/26, distributed robotics group.",
+      plant: "The Self-Pleasuring Plant team (Julia Richard, Nicole Agnese D'Apolito, Yuxing Liu), ITECH CDDF 2026.",
+      "material-in-formation": "Material In-Formation (Tuğçe Naz Demir, Yuxing Liu), ITECH ABxM 2026.",
+      "growing-vase": "Growing Vase report (Fabian Opitz, Yunseo Chang, Yuxing Liu), ITECH CompEx 2026.",
+      halite: "Halite Hopper Crystals (Phoebe Milda Kleinau, Tuğçe Naz Demir, Yuxing Liu), ITECH CDDT 2025/26.",
+      projects: "Earlier design work: Yuxing Liu, design portfolio (UPenn MSD-AAD).",
+      tool: "DeformMatter and SMP Curvature Tool: Yuxing Liu."
+    };
+    function note(text) { var p = document.createElement("p"); p.className = "credits-note"; p.textContent = "Image credits: " + text; return p; }
+    Object.keys(byView).forEach(function (k) {
+      var v = document.querySelector('[data-view="' + k + '"]'); if (v) v.appendChild(note(byView[k]));
+    });
+    var dm = document.querySelector("#dmDocs .docs-panel"); if (dm) dm.appendChild(note("Yuxing Liu, DeformMatter plug-in."));
+    var smp = document.querySelector("#smpDocs .docs-panel"); if (smp) smp.appendChild(note("Yuxing Liu, SMP Curvature Tool, ITECH Material Programming."));
+    // one line per publication
+    var byPub = { liu2026gradient: "Yuxing Liu, Gradient Matter validation", liu2025cdrf: "the authors, CDRF 2025", liu2025caadria: "the authors, CAADRIA 2025" };
+    document.querySelectorAll("#allPubs .bib > li").forEach(function (li) {
+      var btn = li.querySelector("button[aria-controls]"); if (!btn) return;
+      var id = btn.getAttribute("aria-controls").replace(/^a-/, "").replace(/-abs$/, "");
+      if (!byPub[id] || !li.querySelector(".pub-thumb")) return;
+      var c = document.createElement("span"); c.className = "pub-credit"; c.textContent = "Image: " + byPub[id]; li.querySelector(".pub-side").appendChild(c);
+    });
+    var info = document.querySelector(".more-info");
+    if (info) { var c = document.createElement("span"); c.className = "pub-credit"; c.textContent = "Avatar: illustration made for this site"; info.appendChild(document.createElement("br")); info.appendChild(c); }
+  })();
+
+  /* ---------- hover-to-play for in-place swaps ---------- */
+  document.querySelectorAll(".swap-box").forEach(function (b) {
+    var v = b.querySelector(".swap-vid"); if (!v) return;
+    b.addEventListener("mouseenter", function () { var p = v.play(); if (p) p.catch(function () {}); });
+    b.addEventListener("mouseleave", function () { v.pause(); });
+  });
+
+  /* ---------- bracelet photo pops up beside the cursor ---------- */
+  (function () {
+    if (!finePointer) return;
+    var box = document.createElement("div"), im = document.createElement("img"), vd = document.createElement("video"), cap = document.createElement("span");
+    box.className = "pop-float"; box.setAttribute("aria-hidden", "true"); im.alt = ""; vd.muted = true; vd.loop = true; vd.playsInline = true;
+    box.appendChild(im); box.appendChild(vd); box.appendChild(cap); document.body.appendChild(box);
+    var tx = 0, ty = 0, x = 0, y = 0, raf = 0, cur = null, ang = 0;
+    function loop() {
+      x += (tx - x) * 0.18; y += (ty - y) * 0.18; ang += ((tx - x) * 0.04 - ang) * 0.2;
+      var s = box.classList.contains("on") ? 1 : 0.85;
+      box.style.transform = "translate3d(" + x + "px," + y + "px,0) rotate(" + Math.max(-8, Math.min(8, ang)).toFixed(2) + "deg) scale(" + s + ")";
+      raf = Math.abs(tx - x) + Math.abs(ty - y) > 0.4 ? requestAnimationFrame(loop) : 0;
+    }
+    document.addEventListener("pointermove", function (e) {
+      var el = e.target.closest && e.target.closest("[data-pop]");
+      if (el !== cur) {
+        cur = el;
+        if (el) {
+          var src = el.getAttribute("data-pop"), isV = /\.mp4$/.test(src);
+          im.hidden = isV; vd.hidden = !isV; cap.textContent = el.getAttribute("data-pop-cap") || "";
+          if (isV) { if (vd.getAttribute("src") !== src) { vd.poster = src.replace(/\.mp4$/, ".jpg"); vd.src = src; } var pr = vd.play(); if (pr) pr.catch(function () {}); } else { vd.pause(); im.src = src; }
+          if (!box.classList.contains("on")) { x = e.clientX + 26; y = e.clientY - 120; } box.classList.add("on"); }
+        else { box.classList.remove("on"); vd.pause(); }
+      }
+      if (!cur) return;
+      tx = Math.min(e.clientX + 26, innerWidth - 226); ty = Math.max(8, Math.min(e.clientY - 120, innerHeight - 330));
+      if (!raf) raf = requestAnimationFrame(loop);
+    });
+  })();
+
+  /* ---------- avatar eyes follow the pointer ---------- */
+  (function () {
+    var svg = document.getElementById("avatar"); if (!svg) return;
+    var pupils = svg.querySelectorAll(".pupil"), portrait = svg.closest(".portrait"), raf = 0, px = 0, py = 0;
+    function look() {
+      raf = 0;
+      var r = svg.getBoundingClientRect(); if (!r.width) return;
+      var k = 400 / r.width;
+      pupils.forEach(function (p) {
+        var ex = r.left + (+p.getAttribute("data-cx")) / k, ey = r.top + (+p.getAttribute("data-cy")) / k;
+        var dx = (px - ex) * k, dy = (py - ey) * k, dist = Math.sqrt(dx * dx + dy * dy) || 1, m = Math.min(5.5, dist / 30);
+        p.setAttribute("transform", "translate(" + (dx / dist * m).toFixed(2) + " " + (dy / dist * m * 0.7).toFixed(2) + ")");
+      });
+    }
+    if (!reduceMotion) addEventListener("pointermove", function (e) { px = e.clientX; py = e.clientY; if (!raf) raf = requestAnimationFrame(look); }, { passive: true });
+    portrait.addEventListener("pointerenter", function () { portrait.classList.add("happy"); });
+    portrait.addEventListener("pointerleave", function () { portrait.classList.remove("happy"); });
+  })();
+
+  /* ---------- ask prompt: answers come from this site's content ---------- */
+  (function () {
+    var log = document.getElementById("askLog"), form = document.getElementById("askForm"), input = document.getElementById("askIn");
+    var A = [
+      { k: ["help", "commands", "?"], a: "Ask in your own words or type a topic:\n  research · publications · projects · robots · 4d printing · deformmatter · teaching · education · phd · cv · contact · clear" },
+      { k: ["who", "about", "yourself", "yuxing", "estella", "hello", "hi"], a: "I'm Yuxing (Estella) Liu, an M.Sc. ITECH student at the University of Stuttgart and a research assistant at ICD / IntCDC. I work on material programming: making materials change shape in designed ways, and building the computational and robotic tools for it." },
+      { k: ["research", "interest", "focus", "direction", "closed", "loop", "ai", "machine learning", "ml"], a: "My direction is closed-loop material–structure–process co-optimisation: an evolving material library, uncertainty-aware inverse design and sensor-guided fabrication, linked by failure-informed feedback and validated from specimens to components. → <a href=\"#research\">research direction</a>" },
+      { k: ["publication", "paper", "acadia", "cdrf", "caadria", "iass"], a: "Six papers, including Gradient Matter (ACADIA 2026, first author), CDRF 2025 and CAADRIA 2025 on porosity-programmed bilayers, plus co-authored ACADIA 2025 and IASS 2026 papers. → <a href=\"#publications\">publications</a>" },
+      { k: ["4d", "porosity", "hygro", "bilayer", "wood", "pla", "humidity", "gradient"], a: "My main line of work: 4D-printed wood–PLA bilayers that bend as they dry. Gradient porosity sets how they bend, and an inverse-design pipeline turns a target shape into a print. → <a href=\"#gradient-matter\">Gradient Matter</a> · <a href=\"#porosity-bilayers\">bilayers</a>" },
+      { k: ["robot", "kuka", "ur5", "ur", "fabrication", "net", "knot", "echelman"], a: "Robots: C.U.R.E. pairs a KUKA KR 30 HA and a UR10 for operator-free resin bonding, and Robotic Knots replaces net knots with motorised nodes. → <a href=\"#cure\">C.U.R.E.</a> · <a href=\"#robotic-knot\">Robotic Knots</a>" },
+      { k: ["deformmatter", "plugin", "plug-in", "grasshopper", "tool", "software"], a: "Two tools: DeformMatter, my work-in-progress Grasshopper plug-in (16 components, from a target surface to porosity-programmed panels, print paths and G-code), and the SMP Curvature Tool, a Python computer-vision workflow that measures the curvature of shape-memory polymer samples from photos. → <a href=\"#tool\">tool</a>" },
+      { k: ["project"], a: "Projects: C.U.R.E., Robotic Knots, The Self-Pleasuring Plant, Material In-Formation, Growing Vase and Halite Hopper Crystals. My research papers (Gradient Matter, CDRF and CAADRIA) are under <a href=\"#publications\">publications</a>. → <a href=\"#projects\">projects</a>" },
+      { k: ["abm", "agent", "timber", "simulation", "crystal", "halite"], a: "Simulation work: an agent-based model of self-shaping timber (Material In-Formation) and a growth system for halite hopper crystals. → <a href=\"#material-in-formation\">Material In-Formation</a> · <a href=\"#halite\">Halite</a>" },
+      { k: ["optimi", "surrogate", "vase", "nsga", "bayesian"], a: "Growing Vase compares RBFOpt, NSGA-II, HypE and RBFMOpt, with an ExtraTrees surrogate that cut runtime by about 13%. → <a href=\"#growing-vase\">Growing Vase</a>" },
+      { k: ["teach", "workshop", "lecture", "digitalfutures"], a: "I was a teaching assistant for the in-person workshop ReForm: Exploring 4D Printing in Architecture at DigitalFUTURES 2026, and gave a Houdini guest lecture at the Bartlett, UCL. → <a href=\"#teaching\">teaching</a>" },
+      { k: ["education", "study", "degree", "school", "upenn", "ucl", "bartlett", "stuttgart", "itech"], a: "ITECH, University of Stuttgart (2025–) · MPhil/PhD, the Bartlett, UCL (2024–25) · MSD-AAD, UPenn (2022–23) · B.Arch, Suzhou University of Science and Technology (ranked 1st). → <a href=\"#cv\">cv</a>" },
+      { k: ["space", "mars", "moon", "lunar", "earth", "extreme"], a: "My long-term horizon is building beyond Earth: local materials, extreme conditions and no operators on site make it the hardest test of a closed material–design–fabrication loop. It is a direction I want to grow into, not work I have done yet. → <a href=\"#beyond-earth\">beyond Earth</a>" },
+      { k: ["phd", "apply", "application", "2027", "supervisor"], a: "I'm applying to PhD programmes for Fall 2027 in material-informed design, digital fabrication and computational design." },
+      { k: ["cv", "resume"], a: "My CV is on the <a href=\"#cv\">cv</a> page, with a <a href=\"assets/CV_Yuxing_Liu.pdf\" target=\"_blank\" rel=\"noopener\">PDF version</a>." },
+      { k: ["contact", "email", "mail", "reach", "linkedin", "orcid"], a: "Email: yuxinglupennedu@gmail.com · <a href=\"https://orcid.org/0009-0005-6191-6623\" target=\"_blank\" rel=\"noopener\">ORCID</a> · <a href=\"https://www.linkedin.com/in/yuxing-liu-5334a1260/\" target=\"_blank\" rel=\"noopener\">LinkedIn</a>" }
+    ];
+    function esc(t) { return t.replace(/[&<>]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]; }); }
+    function answer(q) {
+      var t = q.toLowerCase(), best = null, score = 0;
+      A.forEach(function (e) { var s = 0; e.k.forEach(function (k) { if (k.length < 3 ? new RegExp("\\b" + k.replace("?", "\\?") + "\\b").test(t) || t === k : t.indexOf(k) >= 0) s += k.length; }); if (s > score) { score = s; best = e; } });
+      return best ? best.a : "I don't have an answer for that here. Type help to see the topics, or email me.";
+    }
+    function say(q) {
+      q = q.trim(); if (!q) return;
+      if (q.toLowerCase() === "clear") { log.innerHTML = ""; return; }
+      log.insertAdjacentHTML("beforeend", '<p class="q"><b>$</b> ' + esc(q) + "</p>");
+      var p = document.createElement("p"); log.appendChild(p);
+      var html = answer(q), plain = html.replace(/<[^>]+>/g, ""), i = 0;
+      if (reduceMotion) { p.innerHTML = html; log.scrollTop = log.scrollHeight; return; }
+      var timer = setInterval(function () {
+        i += 3; p.textContent = plain.slice(0, i); log.scrollTop = log.scrollHeight;
+        if (i >= plain.length) { clearInterval(timer); p.innerHTML = html; log.scrollTop = log.scrollHeight; }
+      }, 16);
+    }
+    form.addEventListener("submit", function (e) { e.preventDefault(); say(input.value); input.value = ""; });
+    document.getElementById("askChips").addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) say(b.textContent); });
+    log.innerHTML = '<p class="q"><b>$</b> hello</p><p>' + A[1].a + "</p>";
+  })();
+
+  /* ---------- SMP tool docs ---------- */
+  (function () {
+    var docs = document.getElementById("smpDocs"), last = null;
+    function open() { last = document.activeElement; docs.hidden = false; document.body.style.overflow = "hidden"; document.getElementById("smpClose").focus(); }
+    function close() { docs.hidden = true; document.body.style.overflow = ""; docs.querySelectorAll("video").forEach(function (v) { v.pause(); }); if (last) last.focus(); }
+    document.getElementById("smpOpen").addEventListener("click", open);
+    document.getElementById("smpOpen2").addEventListener("click", open);
+    document.getElementById("smpClose").addEventListener("click", close);
+    docs.addEventListener("click", function (e) { if (e.target === docs) close(); });
+    document.addEventListener("keydown", function (e) { if (!docs.hidden && e.key === "Escape") close(); });
+  })();
+
+  /* ---------- DeformMatter docs ---------- */
+  (function () {
+    var docs = document.getElementById("dmDocs"), last = null;
+    function open() { last = document.activeElement; docs.hidden = false; document.body.style.overflow = "hidden"; document.getElementById("dmClose").focus(); }
+    function close() { docs.hidden = true; document.body.style.overflow = ""; if (last) last.focus(); }
+    document.getElementById("dmOpen").addEventListener("click", open);
+    document.getElementById("dmOpen2").addEventListener("click", open);
+    document.getElementById("dmClose").addEventListener("click", close);
+    docs.addEventListener("click", function (e) { if (e.target === docs) close(); });
+    document.addEventListener("keydown", function (e) { if (!docs.hidden && e.key === "Escape") close(); });
+  })();
+
+  /* ---------- background: circle packing drawn toward the pointer ---------- */
+  (function () {
+    var cv = document.getElementById("bg"), ctx = cv.getContext("2d");
+    var W = 0, H = 0, d = 1, C = [], mx = -1e4, my = -1e4, active = false, raf = 0, still = 0;
+    var R = 170, PULL = 0.3;
+    function hex(v) { v = v.trim(); if (v[0] !== "#") return [128, 128, 128]; if (v.length === 4) v = "#" + v[1] + v[1] + v[2] + v[2] + v[3] + v[3]; return [parseInt(v.slice(1, 3), 16), parseInt(v.slice(3, 5), 16), parseInt(v.slice(5, 7), 16)]; }
+    var cBase, cAcc, cAlt;
+    function colors() { var cs = getComputedStyle(document.documentElement); cBase = hex(cs.getPropertyValue("--circle")); cAcc = hex(cs.getPropertyValue("--accent")); cAlt = hex(cs.getPropertyValue("--circle-alt")); }
+    function pack() {
+      d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight;
+      cv.width = W * d; cv.height = H * d; cv.style.width = W + "px"; cv.style.height = H + "px";
+      C = []; var cell = 16, grid = {};
+      // a smooth field sets local pore size, like a graded porosity map
+      var ph = Math.random() * 6.28;
+      function field(x, y) { return 0.5 + 0.5 * Math.sin(x * 0.0042 + Math.sin(y * 0.0031 + ph) * 1.8) * Math.cos(y * 0.0036 - x * 0.0013 + ph); }
+      function key(x, y) { return (x / cell | 0) + "," + (y / cell | 0); }
+      // fill from large pores down to small ones so the gaps close up, like a foam or bone section
+      var passes = [1, 0.72, 0.52, 0.38, 0.28, 0.2, 0.15], cap = 9000;
+      for (var q = 0; q < passes.length && C.length < cap; q++) {
+        var tries = Math.round(W * H / (60 * passes[q] * passes[q] + 40));
+        for (var t2 = 0; t2 < tries && C.length < cap; t2++) {
+          var x = Math.random() * W, y = Math.random() * H;
+          var r = Math.max(1.3, (2.2 + 15 * Math.pow(field(x, y), 1.5)) * passes[q] * (0.85 + 0.3 * Math.random())), ok = true;
+          var gx = x / cell | 0, gy = y / cell | 0;
+          for (var i = -3; i <= 3 && ok; i++) for (var j = -3; j <= 3 && ok; j++) {
+            var b = grid[(gx + i) + "," + (gy + j)]; if (!b) continue;
+            for (var k = 0; k < b.length; k++) { var o = b[k], dx = o.hx - x, dy = o.hy - y; if (dx * dx + dy * dy < (o.r + r + 0.9) * (o.r + r + 0.9)) { ok = false; break; } }
+          }
+          if (!ok) continue;
+          var c = { hx: x, hy: y, x: x, y: y, vx: 0, vy: 0, r: r, t: 0 };
+          C.push(c); (grid[key(x, y)] = grid[key(x, y)] || []).push(c);
+        }
+      }
+      kick();
+    }
+    function step() {
+      var moving = 0, i;
+      for (i = 0; i < C.length; i++) {
+        var c = C[i], tx = c.hx, ty = c.hy, f = 0;
+        if (active) { var dx = mx - c.hx, dy = my - c.hy; f = Math.exp(-(dx * dx + dy * dy) / (R * R)); tx += dx * PULL * f; ty += dy * PULL * f; }
+        c.vx = (c.vx + (tx - c.x) * 0.07) * 0.8; c.vy = (c.vy + (ty - c.y) * 0.07) * 0.8;
+        c.x += c.vx; c.y += c.vy; c.t += (f - c.t) * 0.12;
+        if (Math.abs(c.vx) + Math.abs(c.vy) > 0.02 || Math.abs(f - c.t) > 0.002) moving++;
+      }
+      // keep circles from overlapping while they crowd toward the pointer
+      if (active) {
+        var cell = 34, g = {};
+        for (i = 0; i < C.length; i++) { var k = (C[i].x / cell | 0) + "," + (C[i].y / cell | 0); (g[k] = g[k] || []).push(C[i]); }
+        for (i = 0; i < C.length; i++) {
+          var a = C[i]; if (a.t < 0.02) continue;
+          var gx = a.x / cell | 0, gy = a.y / cell | 0;
+          for (var u = -1; u <= 1; u++) for (var v = -1; v <= 1; v++) {
+            var bkt = g[(gx + u) + "," + (gy + v)]; if (!bkt) continue;
+            for (var n = 0; n < bkt.length; n++) {
+              var b = bkt[n]; if (b === a) continue;
+              var ddx = b.x - a.x, ddy = b.y - a.y, dist = Math.sqrt(ddx * ddx + ddy * ddy) || 0.01, min = a.r + b.r + 0.8;
+              if (dist < min) { var push = (min - dist) / dist * 0.25; a.x -= ddx * push; a.y -= ddy * push; b.x += ddx * push; b.y += ddy * push; }
+            }
+          }
+        }
+      }
+      return moving;
+    }
+    function mix(a, b, t) { return [a[0] + (b[0] - a[0]) * t | 0, a[1] + (b[1] - a[1]) * t | 0, a[2] + (b[2] - a[2]) * t | 0]; }
+    function draw() {
+      ctx.setTransform(d, 0, 0, d, 0, 0); ctx.clearRect(0, 0, W, H);
+      var tint = mix(cAcc, cAlt, Math.max(0, Math.min(1, mx / (W || 1)))), i, c;
+      ctx.lineWidth = 0.3; ctx.strokeStyle = "rgba(" + cBase[0] + "," + cBase[1] + "," + cBase[2] + ",0.55)"; ctx.beginPath();
+      for (i = 0; i < C.length; i++) { c = C[i]; if (c.t >= 0.03) continue; ctx.moveTo(c.x + c.r, c.y); ctx.arc(c.x, c.y, c.r, 0, 6.2832); }
+      ctx.stroke();
+      for (i = 0; i < C.length; i++) {
+        c = C[i]; if (c.t < 0.03) continue;
+        var t = Math.min(1, c.t * 1.4), col = mix(cBase, tint, t);
+        ctx.beginPath(); ctx.arc(c.x, c.y, c.r, 0, 6.2832);
+        ctx.lineWidth = 0.3 + t * 0.15; ctx.strokeStyle = "rgba(" + col[0] + "," + col[1] + "," + col[2] + "," + (0.55 + 0.25 * t).toFixed(3) + ")"; ctx.stroke();
+      }
+    }
+    function frame() { raf = 0; var m = step(); draw(); if (m) still = 0; else still++; if (still < 30) kick(); }
+    function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+    colors(); pack();
+    if (!reduceMotion) {
+      addEventListener("pointermove", function (e) { mx = e.clientX; my = e.clientY; active = true; still = 0; kick(); }, { passive: true });
+      document.documentElement.addEventListener("mouseleave", function () { active = false; still = 0; kick(); });
+      addEventListener("blur", function () { active = false; still = 0; kick(); });
+    }
+    var rt = 0; addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(pack, 200); });
+    new MutationObserver(function () { colors(); still = 0; kick(); }).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+    matchMedia("(prefers-color-scheme: dark)").addEventListener("change", function () { colors(); still = 0; kick(); });
+  })();
+
+  /* ---------- typing brand in the nav ---------- */
+  (function () {
+    var brand = document.querySelector(".brand-name"), t = document.querySelector(".brand-text");
+    var phrases = [["Yuxing Liu", true, 5500], ["Material Programming", false, 2000], ["4D Printing", false, 2000], ["Robotic Fabrication", false, 2000], ["Computational Design", false, 2000]];
+    if (reduceMotion) return;
+    function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+    (async function loop() {
+      for (;;) for (var k = 0; k < phrases.length; k++) {
+        var s = phrases[k][0]; brand.classList.toggle("is-bold", phrases[k][1]);
+        for (var i = 1; i <= s.length; i++) { t.textContent = s.slice(0, i); await wait(78); }
+        await wait(phrases[k][2]);
+        for (var j = s.length - 1; j >= 0; j--) { t.textContent = s.slice(0, j); await wait(46); }
+        await wait(220);
+      }
+    })();
+  })();
+
+  /* ---------- page titles type in when a view opens ---------- */
+  (function () {
+    document.querySelectorAll(".post-title").forEach(function (h) {
+      if (h.querySelector(".ch")) return;
+      h.setAttribute("aria-label", h.textContent);
+      (function split(node) {
+        Array.prototype.slice.call(node.childNodes).forEach(function (n) {
+          if (n.nodeType === 3) {
+            var frag = document.createDocumentFragment();
+            n.textContent.split("").forEach(function (c) { var s = document.createElement("span"); s.className = "ch"; s.textContent = c; frag.appendChild(s); });
+            node.replaceChild(frag, n);
+          } else if (n.nodeType === 1) split(n);
+        });
+      })(h);
+    });
+    if (reduceMotion) return;
+    var timer = 0;
+    function typeVisible() {
+      clearInterval(timer);
+      var h = document.querySelector("[data-view].on .post-title"); if (!h) return;
+      var chs = h.querySelectorAll(".ch"), i = 0;
+      chs.forEach(function (c) { c.classList.add("pre"); });
+      h.classList.add("typing");
+      timer = setInterval(function () {
+        if (i >= chs.length) { clearInterval(timer); h.classList.remove("typing"); return; }
+        chs[i++].classList.remove("pre");
+      }, Math.max(22, Math.min(55, 900 / chs.length)));
+    }
+    addEventListener("hashchange", typeVisible);
+    typeVisible();
+  })();
+
+  /* ---------- fun facts ---------- */
+  (function () {
+    var facts = [
+      "Before Stuttgart I studied in Suzhou, Philadelphia and London, with summer programmes in Madison and Hong Kong.",
+      "I graduated first in my B.Arch cohort and held China's National Scholarship three years in a row (2018–2020).",
+      "My 4D-printed samples are slow: I measure their curvature after 24 and again after 72 hours of drying.",
+      "C.U.R.E. made a KUKA KR 30 HA and a UR10 share one joint: one robot holds the tube while the other glues and cures it.",
+      "One project was a vase optimised for a particular bouquet, scored on printability, water height, stem collisions and tipping.",
+      "Hopper crystals grow faster at their edges than their faces, which is why our simulated halite ended up hollow and stepped.",
+      "I write code in Python, C# and Houdini VEX, and I speak Chinese, English and some German.",
+      "Away from the lab I take photographs, which are on my <a href=\"https://estellalyx.myportfolio.com/\" target=\"_blank\" rel=\"noopener\">design portfolio</a>, and I play the flute and the cello."
+    ];
+    var i = 0, text = document.getElementById("factText"), dots = document.getElementById("factDots"), card = document.getElementById("factCard");
+    dots.innerHTML = facts.map(function (_, k) { return '<button type="button" role="tab" aria-label="Fact ' + (k + 1) + '"></button>'; }).join("");
+    function show(k) {
+      i = (k + facts.length) % facts.length;
+      text.innerHTML = facts[i];
+      text.classList.remove("swap"); void text.offsetWidth; text.classList.add("swap");
+      dots.querySelectorAll("button").forEach(function (b, n) { b.setAttribute("aria-current", String(n === i)); });
+    }
+    document.getElementById("factNext").addEventListener("click", function (e) { e.stopPropagation(); show(i + 1); });
+    document.getElementById("factShuffle").addEventListener("click", function (e) {
+      e.stopPropagation(); var k; do { k = Math.floor(Math.random() * facts.length); } while (k === i); show(k);
+    });
+    dots.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return; e.stopPropagation();
+      show(Array.prototype.indexOf.call(dots.children, b));
+    });
+    card.addEventListener("click", function (e) { if (!e.target.closest("a")) show(i + 1); });
+    card.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowRight") { e.preventDefault(); show(i + 1); }
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(i - 1); }
+    });
+    show(0);
+    text.classList.remove("swap");
+  })();
+
+  /* ---------- theme ---------- */
+  var root = document.documentElement;
+  try { var saved = localStorage.getItem("yl-theme"); if (saved) root.setAttribute("data-theme", saved); } catch (e) {}
+  document.getElementById("themeBtn").addEventListener("click", function () {
+    var cur = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    var next = cur === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("yl-theme", next); } catch (e) {}
+  });
+
+  /* ---------- copy email ---------- */
+  document.getElementById("copyEmail").addEventListener("click", function () {
+    var btn = this, txt = document.getElementById("email").textContent;
+    function done() { btn.textContent = "copied"; setTimeout(function () { btn.textContent = "copy"; }, 1600); }
+    function fallback() { var r = document.createRange(); r.selectNodeContents(document.getElementById("email")); var s = getSelection(); s.removeAllRanges(); s.addRange(r); }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, fallback); else fallback();
+  });
+})();
+</script>
+</body>
+</html>
